@@ -5,7 +5,257 @@
     <link rel="stylesheet" href="./css/main.css">
 </head>
 <body>
-		<!-- Your code goes here-->
+  <!-- Your code goes here-->
+  <div id="paradigm">
+
+                                <form action="javascript:checkCondition()" method="post" target="_parent">
+                                    <div id="mainContainer">
+
+                                        <div id="selector_spm">
+                                            <center>
+                                                <b>Select a Root Word</b>
+                                                <br/>
+                                                <select id="mySelection" name="mySelection" onchange="clearForm();">
+                                                    <option select="selected" value="1">बच्चा</option>
+                                                    <option value="1">लड़का</option>
+                                                    <option value="1">घोड़ा</option>
+                                                    <option value="1">गधा</option>
+                                                    <option value="2">बच्ची</option>
+                                                    <option value="2">लड़की</option>
+                                                    <option value="2">नदी</option>
+                                                    <option value="2">गली</option>
+                                                    <option value="3">माला</option>
+                                                    <option value="3">लता</option>
+                                                    <option value="3">शाखा</option>
+                                                    <option value="3">गाथा</option>
+                                                    <option value="4">माली</option>
+                                                    <option value="4">जोहरी</option>
+                                                    <option value="4">कूली</option>
+                                                    <option value="4">आदमी
+                                                    </option>
+                                                </select>
+                                            </center>
+                                        </div>
+
+                                    </div>
+
+                                    <table width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <b>Fill the add delete table here:</b>
+                                                    <br/>
+                                                    <br/>
+                                                    <table border="1" cellpadding="4" cellspacing="-2" style="text-align:center;">
+                                                        <tbody>
+                                                            <tr>
+
+                                                                <th>Delete</th>
+                                                                <th>Add</th>
+                                                                <th>Number</th>
+                                                                <th>Case</th>
+                                                                <th id="check"></th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <select id="delsingdr" name="delsingdr">
+                                                                        <option>आ</option>
+                                                                        <option>आओं</option>
+                                                                        <option>आयें</option>
+                                                                        <option>इयाँ</option>
+                                                                        <option>इयों</option>
+                                                                        <option>ई</option>
+                                                                        <option>ए</option>
+                                                                        <option>ओं
+                                                                        </option>
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                    <select id="addsingdr" name="addsingdr">
+                                                                        <option>आ</option>
+                                                                        <option>आओं</option>
+                                                                        <option>आयें</option>
+                                                                        <option>इयाँ</option>
+                                                                        <option>इयों</option>
+                                                                        <option>ई</option>
+                                                                        <option>ए</option>
+                                                                        <option>ओं
+                                                                        </option>
+                                                                    </select>
+                                                                </td>
+                                                                <td>sing</td>
+                                                                <td>dr</td>
+                                                                <td id="check0"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <select id="delpludr" name="delpludr">
+                                                                        <option>आ</option>
+                                                                        <option>आओं</option>
+                                                                        <option>आयें</option>
+                                                                        <option>इयाँ</option>
+                                                                        <option>इयों</option>
+                                                                        <option>ई</option>
+                                                                        <option>ए</option>
+                                                                        <option>ओं
+                                                                        </option>
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                    <select id="addpludr" name="addpludr">
+                                                                        <option>आ</option>
+                                                                        <option>आओं</option>
+                                                                        <option>आयें</option>
+                                                                        <option>इयाँ</option>
+                                                                        <option>इयों</option>
+                                                                        <option>ई</option>
+                                                                        <option>ए</option>
+                                                                        <option>ओं
+                                                                        </option>
+                                                                    </select>
+                                                                </td>
+                                                                <td>plu</td>
+                                                                <td>dr</td>
+                                                                <td id="check1"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <select id="delsingob" name="delsingob">
+                                                                        <option>आ</option>
+                                                                        <option>आओं</option>
+                                                                        <option>आयें</option>
+                                                                        <option>इयाँ</option>
+                                                                        <option>इयों</option>
+                                                                        <option>ई</option>
+                                                                        <option>ए</option>
+                                                                        <option>ओं
+                                                                        </option>
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                    <select id="addsingob" name="addsingob">
+                                                                        <option>आ</option>
+                                                                        <option>आओं</option>
+                                                                        <option>आयें</option>
+                                                                        <option>इयाँ</option>
+                                                                        <option>इयों</option>
+                                                                        <option>ई</option>
+                                                                        <option>ए</option>
+                                                                        <option>ओं
+                                                                        </option>
+                                                                    </select>
+                                                                </td>
+                                                                <td>sing</td>
+                                                                <td>ob</td>
+                                                                <td id="check2"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <select id="delpluob" name="delpluob">
+                                                                        <option>आ</option>
+                                                                        <option>आओं</option>
+                                                                        <option>आयें</option>
+                                                                        <option>इयाँ</option>
+                                                                        <option>इयों</option>
+                                                                        <option>ई</option>
+                                                                        <option>ए</option>
+                                                                        <option>ओं
+                                                                        </option>
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                    <select id="addpluob" name="addpluob">
+                                                                        <option>आ</option>
+                                                                        <option>आओं</option>
+                                                                        <option>आयें</option>
+                                                                        <option>इयाँ</option>
+                                                                        <option>इयों</option>
+                                                                        <option>ई</option>
+                                                                        <option>ए</option>
+                                                                        <option>ओं
+                                                                        </option>
+                                                                    </select>
+                                                                </td>
+                                                                <td>plu</td>
+                                                                <td>ob</td>
+                                                                <td id="check3"></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                                <td></td>
+                                                <td></td>
+
+                                                <td align="right">
+
+                                                    <input id="answer" name="answer" type="hidden" value="1 लड़का आ आ आ आ आ ए ए ओं 2 लड़की ई ई ई ई ई इयाँ ई इयों 3 लता आ आ आ आ आ आयें आ आओं 4 आदमी ई ई ई ई ई ई ई इयों"/><b> For Example for लड़का:</b>
+                                                    <br/>
+                                                    <br/>
+                                                    <table border="1" cellpadding="4" cellspacing="-2" style="text-align:center;">
+                                                        <tbody>
+                                                            <tr>
+                                                                <th>Delete</th>
+                                                                <th>Add</th>
+                                                                <th>Number</th>
+                                                                <th>Case</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>आ</td>
+                                                                <td>आ</td>
+                                                                <td>sing</td>
+                                                                <td>dr</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>आ</td>
+                                                                <td>ए</td>
+                                                                <td>plu</td>
+                                                                <td>dr</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>आ</td>
+                                                                <td>ए</td>
+                                                                <td>sing</td>
+                                                                <td>ob</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>आ</td>
+                                                                <td>ओं</td>
+                                                                <td>plu</td>
+                                                                <td>ob</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <br/>
+                                    <br/>
+
+                                    <!---<center><input type="submit" value="generate analyzer" onsubmit="showDig();" ></center>-->
+
+                                    <center>
+                                        <input onsubmit="checkCondition();" type="submit" value="Submit"/>
+                                    </center>
+
+                                </form>
+
+                                <div align="center" id="result1">
+                                    <form></form>
+                                </div>
+                                <div align="center" id="result2"></div>
+
+                                <br/>
+                                <br/>
+
+                            </div>
+                            <div id="paradigm"></div>
+
+                        </div>
+                    </div>
+                </div>
 
 	<!-- Add JS at the bottom of HTML file --> 
         <script src="./js/main.js"></script>
