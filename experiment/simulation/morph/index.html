@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <meta content="Welcome to Virtual Labs - A MHRD Govt of india Initiative" name="description"/>
+    <meta content="Virtual Labs - A MHRD Govt of india Initiative" name="author"/>
+
+    <link href="../images/favicon.ico" rel="shortcut icon"/>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet"/>
+
+    <link href="../vendors/font-awesome/css/font-awesome.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    <link href="../css/style.css" rel="stylesheet"/>
+    <script src="../js/modernizr-1.5.min.js" type="text/javascript"></script>
+
+    <script src="../js/jquery-1.7.1.min.js"></script>
+
+    <script type="text/javascript">
+        var AddDel = new Array; //global variable to store the correct Add-Del table
+
+        function checkCondition() { //checks your answer
+
+            var par = document.getElementById("mySelection");
+            theIndx = par.selectedIndex;
+
+            answer = new Array(); //to store your answer
+            answer[0] = document.getElementById("delsingdr").value;
+            answer[1] = document.getElementById("delpludr").value;
+            answer[2] = document.getElementById("delsingob").value;
+            answer[3] = document.getElementById("delpluob").value;
+            answer[4] = document.getElementById("addsingdr").value;
+            answer[5] = document.getElementById("addpludr").value;
+            answer[6] = document.getElementById("addsingob").value;
+            answer[7] = document.getElementById("addpluob").value;
+
+            cor_answers = document.getElementById("answer").value;
+
+            cor_answers = cor_answers.split(" ");
+
+            var ii = 0;
+            flag = new Array(0, 0, 0, 0, 0, 0, 0, 0);
+            flag1 = 0;
+            paradigm = par.options[theIndx].value;
+            var ind = (paradigm - 1) * 8 + (2 * paradigm);
+            for (var i = ind; i < ind + 8; i++) {
+                AddDel[ii] = cor_answers[i];
+                //   document.write(AddDel[ii] + "<br>");
+                ii++;
+            }
+
+            document.getElementById('check').innerHTML = '<b>Correction</b>';
+
+            for (i = 0; i < 8; i++) {
+                if (answer[i] != AddDel[i]) {
+                    flag[i] = 1;
+                    flag1 = 1;
+                    document.getElementById('check' + i % 4).innerHTML = '<img src="wrong.png" height="25" width="25" alt="Wrong" /> ';
+
+                } else if (flag[i - 4] != 1) //if the corresponding Add table is wrong dont overwrite
+                    document.getElementById('check' + i % 4).innerHTML = '<img src="right.png" height="25" width="25" alt="Right" /> ';
+            }
+
+            if (flag1 == 1) {
+                document.getElementById('result1').innerHTML = '<br/> <p style="font-family:arial;color:red;font-size:20px;"> Error in your Add-Delete table!</p> <br/> <br/> <form action="javascript:correctTable()" > <input type="submit" value="Get Answer" onsubmit="correctTable();" /> </form><br/>';
+                document.getElementById('result2').innerHTML = ''; //clear previous value stored in this section
+
+            } else {
+                document.getElementById('result1').innerHTML = '<br/> <p style="font-family:arial;color:green;font-size:20px;"> Correct Answer! </p> <br/> <br/>';
+                document.getElementById('result2').innerHTML = ''; //clear previous value stored in this section
+                document.myform3.formvar.value = answer[0];
+            }
+
+        }
+
+        function clearForm() //clears form on selecting a different root word
+        {
+            var i;
+            document.getElementById('check').innerHTML = '';
+            for (i = 0; i < 4; i++)
+                document.getElementById('check' + i).innerHTML = '';
+            document.getElementById("addsingdr").value = 'आ';
+            document.getElementById("addpludr").value = 'आ';
+            document.getElementById("addsingob").value = 'आ';
+            document.getElementById("addpluob").value = 'आ';
+            document.getElementById("delsingdr").value = 'आ';
+            document.getElementById("delpludr").value = 'आ';
+            document.getElementById("delsingob").value = 'आ';
+            document.getElementById("delpluob").value = 'आ';
+            document.getElementById('result2').innerHTML = '';
+            document.getElementById('result1').innerHTML = '';
+        }
+
+        function correctTable() //prints the correct table
+        {
+            document.getElementById('result2').innerHTML = '<table cellspacing="-2" cellpadding="4" border="1" style="text-align:center;"><tr><th>Delete</th><th>Add</th><th>Number</th><th>Case</th></tr> <tr><td>' + AddDel[0] + '</td><td>' + AddDel[4] + '</td><td>sing</td><td>dr</td> </tr><tr><td>' + AddDel[1] + '</td><td>' + AddDel[5] + '</td><td>plu</td><td>dr</td> </tr><tr><td>' + AddDel[2] + '</td><td>' + AddDel[6] + '</td><td>sing</td><td>ob</td> </tr><tr><td>' + AddDel[3] + '</td><td>' + AddDel[7] + '</td><td>plu</td><td>ob</td> </tr></table>';
+
+        }
+    </script>
+
+</head>
+
+<body class="index" id="page-top">
+        <header>
+        </header>
+
+            <!-- =================================================================================================================================== -->                    <div class="col-md-10 lab-list-col-10">
+
+                        <!--edit -->
+                        <h1 class="text-h1-lightblue">Morphology</h1>
+                        <div class="content" id="experiment-article-section-4-content">
+                            <div id="paradigm">
+
+                                <form action="javascript:checkCondition()" method="post" target="_parent">
+                                    <div id="mainContainer">
+
+                                        <div id="selector_spm">
+                                            <center>
+                                                <b>Select a Root Word</b>
+                                                <br/>
+                                                <select id="mySelection" name="mySelection" onchange="clearForm();">
+                                                    <option select="selected" value="1">बच्चा</option>
+                                                    <option value="1">लड़का</option>
+                                                    <option value="1">घोड़ा</option>
+                                                    <option value="1">गधा</option>
+                                                    <option value="2">बच्ची</option>
+                                                    <option value="2">लड़की</option>
+                                                    <option value="2">नदी</option>
+                                                    <option value="2">गली</option>
+                                                    <option value="3">माला</option>
+                                                    <option value="3">लता</option>
+                                                    <option value="3">शाखा</option>
+                                                    <option value="3">गाथा</option>
+                                                    <option value="4">माली</option>
+                                                    <option value="4">जोहरी</option>
+                                                    <option value="4">कूली</option>
+                                                    <option value="4">आदमी
+                                                    </option>
+                                                </select>
+                                            </center>
+                                        </div>
+
+                                    </div>
+
+                                    <table width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <b>Fill the add delete table here:</b>
+                                                    <br/>
+                                                    <br/>
+                                                    <table border="1" cellpadding="4" cellspacing="-2" style="text-align:center;">
+                                                        <tbody>
+                                                            <tr>
+
+                                                                <th>Delete</th>
+                                                                <th>Add</th>
+                                                                <th>Number</th>
+                                                                <th>Case</th>
+                                                                <th id="check"></th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <select id="delsingdr" name="delsingdr">
+                                                                        <option>आ</option>
+                                                                        <option>आओं</option>
+                                                                        <option>आयें</option>
+                                                                        <option>इयाँ</option>
+                                                                        <option>इयों</option>
+                                                                        <option>ई</option>
+                                                                        <option>ए</option>
+                                                                        <option>ओं
+                                                                        </option>
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                    <select id="addsingdr" name="addsingdr">
+                                                                        <option>आ</option>
+                                                                        <option>आओं</option>
+                                                                        <option>आयें</option>
+                                                                        <option>इयाँ</option>
+                                                                        <option>इयों</option>
+                                                                        <option>ई</option>
+                                                                        <option>ए</option>
+                                                                        <option>ओं
+                                                                        </option>
+                                                                    </select>
+                                                                </td>
+                                                                <td>sing</td>
+                                                                <td>dr</td>
+                                                                <td id="check0"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <select id="delpludr" name="delpludr">
+                                                                        <option>आ</option>
+                                                                        <option>आओं</option>
+                                                                        <option>आयें</option>
+                                                                        <option>इयाँ</option>
+                                                                        <option>इयों</option>
+                                                                        <option>ई</option>
+                                                                        <option>ए</option>
+                                                                        <option>ओं
+                                                                        </option>
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                    <select id="addpludr" name="addpludr">
+                                                                        <option>आ</option>
+                                                                        <option>आओं</option>
+                                                                        <option>आयें</option>
+                                                                        <option>इयाँ</option>
+                                                                        <option>इयों</option>
+                                                                        <option>ई</option>
+                                                                        <option>ए</option>
+                                                                        <option>ओं
+                                                                        </option>
+                                                                    </select>
+                                                                </td>
+                                                                <td>plu</td>
+                                                                <td>dr</td>
+                                                                <td id="check1"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <select id="delsingob" name="delsingob">
+                                                                        <option>आ</option>
+                                                                        <option>आओं</option>
+                                                                        <option>आयें</option>
+                                                                        <option>इयाँ</option>
+                                                                        <option>इयों</option>
+                                                                        <option>ई</option>
+                                                                        <option>ए</option>
+                                                                        <option>ओं
+                                                                        </option>
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                    <select id="addsingob" name="addsingob">
+                                                                        <option>आ</option>
+                                                                        <option>आओं</option>
+                                                                        <option>आयें</option>
+                                                                        <option>इयाँ</option>
+                                                                        <option>इयों</option>
+                                                                        <option>ई</option>
+                                                                        <option>ए</option>
+                                                                        <option>ओं
+                                                                        </option>
+                                                                    </select>
+                                                                </td>
+                                                                <td>sing</td>
+                                                                <td>ob</td>
+                                                                <td id="check2"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <select id="delpluob" name="delpluob">
+                                                                        <option>आ</option>
+                                                                        <option>आओं</option>
+                                                                        <option>आयें</option>
+                                                                        <option>इयाँ</option>
+                                                                        <option>इयों</option>
+                                                                        <option>ई</option>
+                                                                        <option>ए</option>
+                                                                        <option>ओं
+                                                                        </option>
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                    <select id="addpluob" name="addpluob">
+                                                                        <option>आ</option>
+                                                                        <option>आओं</option>
+                                                                        <option>आयें</option>
+                                                                        <option>इयाँ</option>
+                                                                        <option>इयों</option>
+                                                                        <option>ई</option>
+                                                                        <option>ए</option>
+                                                                        <option>ओं
+                                                                        </option>
+                                                                    </select>
+                                                                </td>
+                                                                <td>plu</td>
+                                                                <td>ob</td>
+                                                                <td id="check3"></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                                <td></td>
+                                                <td></td>
+
+                                                <td align="right">
+
+                                                    <input id="answer" name="answer" type="hidden" value="1 लड़का आ आ आ आ आ ए ए ओं 2 लड़की ई ई ई ई ई इयाँ ई इयों 3 लता आ आ आ आ आ आयें आ आओं 4 आदमी ई ई ई ई ई ई ई इयों"/><b> For Example for लड़का:</b>
+                                                    <br/>
+                                                    <br/>
+                                                    <table border="1" cellpadding="4" cellspacing="-2" style="text-align:center;">
+                                                        <tbody>
+                                                            <tr>
+                                                                <th>Delete</th>
+                                                                <th>Add</th>
+                                                                <th>Number</th>
+                                                                <th>Case</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>आ</td>
+                                                                <td>आ</td>
+                                                                <td>sing</td>
+                                                                <td>dr</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>आ</td>
+                                                                <td>ए</td>
+                                                                <td>plu</td>
+                                                                <td>dr</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>आ</td>
+                                                                <td>ए</td>
+                                                                <td>sing</td>
+                                                                <td>ob</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>आ</td>
+                                                                <td>ओं</td>
+                                                                <td>plu</td>
+                                                                <td>ob</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <br/>
+                                    <br/>
+
+                                    <!---<center><input type="submit" value="generate analyzer" onsubmit="showDig();" ></center>-->
+
+                                    <center>
+                                        <input onsubmit="checkCondition();" type="submit" value="Submit"/>
+                                    </center>
+
+                                </form>
+
+                                <div align="center" id="result1">
+                                    <form></form>
+                                </div>
+                                <div align="center" id="result2"></div>
+
+                                <br/>
+                                <br/>
+
+                            </div>
+                            <div id="paradigm"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- =================================================================================================================================== -->
+
+        </div>
+
+    <script src="../js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../js/bootstrap.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="../js/custom.js"></script>
+
+    <!-- Include js plugin -->
+    <script src="../vendors/owl-carousel/owl.carousel.js"></script>
+
+</body><!-- jQuery --></html>
