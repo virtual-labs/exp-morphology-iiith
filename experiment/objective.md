@@ -1,0 +1,1 @@
+- The Objective of the experiment is understanding the morphology of a word by the use of Add-Delete table.
