@@ -95,32 +95,32 @@
 <tr><th>Delete</th><th>Add</th></tr>
 <?php
 	function addDelete($root,$word){
-		for($i=0;$i<strlen($root);$i++){
+		for($i=0;$i<strlen((string) $root);$i++){
 			if($word[$i]!=$root[$i]){
 				break;
 			}
 		}
-		if($i==strlen($root)){
+		if($i==strlen((string) $root)){
 			return $i-1;
 		}
 		else return $i;
 	}
 	$b=addDelete($root,$msd);
-	echo "<tr><td>".substr($msd,$b)."</td><td>".substr($root,$b)."</td></tr>";
+	echo "<tr><td>".substr((string) $msd,$b)."</td><td>".substr((string) $root,$b)."</td></tr>";
 	$b=addDelete($root,$mso);
-	echo "<tr><td>".substr($mso,$b)."</td><td>".substr($root,$b)."</td></tr>";
+	echo "<tr><td>".substr((string) $mso,$b)."</td><td>".substr((string) $root,$b)."</td></tr>";
 	$b=addDelete($root,$mpd);
-	echo "<tr><td>".substr($mpd,$b)."</td><td>".substr($root,$b)."</td></tr>";
+	echo "<tr><td>".substr((string) $mpd,$b)."</td><td>".substr((string) $root,$b)."</td></tr>";
 	$b=addDelete($root,$mpo);
-	echo "<tr><td>".substr($mpo,$b)."</td><td>".substr($root,$b)."</td></tr>";
+	echo "<tr><td>".substr((string) $mpo,$b)."</td><td>".substr((string) $root,$b)."</td></tr>";
 	$b=addDelete($root,$fsd);
-	echo "<tr><td>".substr($fsd,$b)."</td><td>".substr($root,$b)."</td></tr>";
+	echo "<tr><td>".substr((string) $fsd,$b)."</td><td>".substr((string) $root,$b)."</td></tr>";
 	$b=addDelete($root,$fso);
-	echo "<tr><td>".substr($fso,$b)."</td><td>".substr($root,$b)."</td></tr>";
+	echo "<tr><td>".substr((string) $fso,$b)."</td><td>".substr((string) $root,$b)."</td></tr>";
 	$b=addDelete($root,$fpd);
-	echo "<tr><td>".substr($fpd,$b)."</td><td>".substr($root,$b)."</td></tr>";
+	echo "<tr><td>".substr((string) $fpd,$b)."</td><td>".substr((string) $root,$b)."</td></tr>";
 	$b=addDelete($root,$fpo);
-	echo "<tr><td>".substr($fpo,$b)."</td><td>".substr($root,$b)."</td></tr>";
+	echo "<tr><td>".substr((string) $fpo,$b)."</td><td>".substr((string) $root,$b)."</td></tr>";
 ?>
 </table>
 </div>
