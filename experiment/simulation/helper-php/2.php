@@ -16,13 +16,13 @@ height:25px;
 </tr>
 <?php
          
-$N=array("sing","plu","sing","plu");
-$C=array("dr","dr","ob","ob");
+$N=["sing", "plu", "sing", "plu"];
+$C=["dr", "dr", "ob", "ob"];
 
 $answer_path="../Exp3/answers_opt.txt";
 $f2 =  fopen($answer_path, "r");
 $buffer3=fread($f2, filesize($answer_path));
-$answer=split(" ", $buffer3) ;
+$answer=preg_split('# #m', $buffer3) ;
 
 
 for($j=0;$j<4;$j++){
