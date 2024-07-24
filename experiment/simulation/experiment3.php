@@ -96,7 +96,7 @@ function correctTable()				//prints the correct table
 
 </head>
 <body>
-<form action="javascript:checkCondition()" target="_parent" method="post" >
+<form action="javascript:checkCondition()" target="_self" method="post" >
 <div id="mainContainer">
 
 <div id="selector_spm">
@@ -106,7 +106,7 @@ function correctTable()				//prints the correct table
 $options_path="./Exp3/options.txt";
 $f1 =  fopen($options_path, "r");
 $buffer=fread($f1, filesize($options_path));
-$options=split(" ", $buffer) ;
+$options=preg_split('# #m', $buffer) ;
 echo "<b>Select a Root Word</b> <br/>";
 echo "<select name='mySelection' id='mySelection' onChange='clearForm();' >";
 echo "<option value=\"".$options[0]."\" select=\"selected\">".$options[1]."</option>";
@@ -138,13 +138,13 @@ echo "</select>";
 </tr>
 <?php
          
-$N=array("sing","plu","sing","plu");
-$C=array("dr","dr","ob","ob");
+$N=["sing", "plu", "sing", "plu"];
+$C=["dr", "dr", "ob", "ob"];
 
 $answer_path="./Exp3/answers_opt.txt";
 $f2 =  fopen($answer_path, "r");
 $buffer3=fread($f2, filesize($answer_path));
-$answer=split(" ", $buffer3) ;
+$answer=preg_split('# #m', $buffer3) ;
 
 
 for($j=0;$j<4;$j++){
@@ -177,7 +177,7 @@ $table_path="./Exp3/paradigm.txt";
 $f1 =  fopen($table_path, "r");
 $buffer2=fread($f1, filesize($table_path));
 echo "<input type='hidden' name='answer' id='answer' value=\"".$buffer2."\">";
-$val=split(" ", $buffer2) ;
+$val=preg_split('# #m', $buffer2) ;
 echo "<table cellspacing=\"-2\" cellpadding=\"4\" border=\"1\" style=\"text-align:center;\">";
 echo "<tr> <b> For Example for ".$val[1].":</b><br/><br/>";
 echo "<th>Delete</th><th>Add</th><th>Number</th><th>Case</th></tr>";
