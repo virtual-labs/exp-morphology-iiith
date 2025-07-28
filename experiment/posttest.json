@@ -1,0 +1,158 @@
+{
+  "version": 2.0,
+  "questions": [
+    {
+      "question": "What is a morpheme in Hindi linguistics?",
+      "answers": {
+        "a": "A complete sentence in Hindi",
+        "b": "The smallest meaningful unit of language that cannot be further divided",
+        "c": "A type of Hindi grammar rule",
+        "d": "A Hindi writing system"
+      },
+      "explanations": {
+        "a": "Incorrect. A sentence is made up of many morphemes.",
+        "b": "Correct! A morpheme is the smallest meaningful unit of language that cannot be divided further while retaining meaning. In Hindi, examples include 'लड़क' (root) and 'आ' (suffix) in 'लड़का' (boy).",
+        "c": "Incorrect. Grammar rules govern how morphemes combine, but are not morphemes themselves.",
+        "d": "Incorrect. Writing systems represent morphemes but are not morphemes themselves."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "In the Hindi word 'लड़कियाँ' (ladkiyan - girls), how many morphemes are there?",
+      "answers": {
+        "a": "One",
+        "b": "Two",
+        "c": "Three",
+        "d": "Four"
+      },
+      "explanations": {
+        "a": "Incorrect. 'लड़कियाँ' contains more than one meaningful unit.",
+        "b": "Incorrect. There are more than two meaningful units in 'लड़कियाँ'.",
+        "c": "Correct! 'लड़कियाँ' has three morphemes: 'लड़क' (root meaning 'child'), 'ई' (feminine marker), and 'याँ' (plural marker). This demonstrates how Hindi words can combine multiple morphemes.",
+        "d": "Incorrect. 'लड़कियाँ' does not contain four morphemes."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "What is the root of the Hindi word 'आदमियों' (aadmiyon - of men)?",
+      "answers": {
+        "a": "आदमियों",
+        "b": "आदमी",
+        "c": "आदम",
+        "d": "आद"
+      },
+      "explanations": {
+        "a": "Incorrect. This is the complete word, not the root.",
+        "b": "Incorrect. This includes additional morphemes beyond the root.",
+        "c": "Correct! The root is 'आदम' (aadam). The word 'आदमियों' is formed by adding 'ी' (feminine marker), 'य' (plural marker), and 'ों' (oblique case marker) to the root.",
+        "d": "Incorrect. This is only a partial root."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Which of the following demonstrates inflectional morphology in Hindi?",
+      "answers": {
+        "a": "लड़का → लड़की (boy → girl)",
+        "b": "लड़का → लड़के (boy → boys)",
+        "c": "खुश → खुशी (happy → happiness)",
+        "d": "पढ़ → पढ़ना (read → reading)"
+      },
+      "explanations": {
+        "a": "Incorrect. This shows derivational morphology as it changes the word's meaning and creates a new word.",
+        "b": "Correct! 'लड़का → लड़के' shows inflectional morphology because it changes the number (singular to plural) without changing the word's core meaning or category.",
+        "c": "Incorrect. This is derivational morphology as it changes the word class from adjective to noun.",
+        "d": "Incorrect. This is derivational morphology as it creates a new word with a different meaning and class."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "In Hindi morphological analysis, what does the suffix '-ों' typically indicate?",
+      "answers": {
+        "a": "Feminine gender",
+        "b": "Plural number",
+        "c": "Oblique case",
+        "d": "Past tense"
+      },
+      "explanations": {
+        "a": "Incorrect. Feminine gender is typically marked by '-ई' in Hindi.",
+        "b": "Incorrect. While '-ों' can appear in plural forms, it specifically marks case.",
+        "c": "Correct! The suffix '-ों' in Hindi typically indicates the oblique case, used when a postposition follows the noun. For example, 'लड़कों' (of boys) where the noun is in oblique case.",
+        "d": "Incorrect. Past tense is marked by different morphological patterns in Hindi."
+      },
+      "correctAnswer": "c",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "What is the purpose of morphological analysis in computational linguistics?",
+      "answers": {
+        "a": "To translate words between languages",
+        "b": "To break down words into their constituent morphemes and identify grammatical features",
+        "c": "To count the number of words in a text",
+        "d": "To arrange words alphabetically"
+      },
+      "explanations": {
+        "a": "Incorrect. While translation uses morphological analysis, it's not the primary purpose.",
+        "b": "Correct! Morphological analysis in computational linguistics involves breaking down words into their constituent morphemes and identifying their grammatical features, which is essential for natural language processing tasks.",
+        "c": "Incorrect. Word counting is a simple task that doesn't require detailed morphological analysis.",
+        "d": "Incorrect. Alphabetical arrangement is a basic sorting task, not the purpose of morphological analysis."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "How does the concept of 'agreement' work in Hindi morphological analysis?",
+      "answers": {
+        "a": "Only verbs agree with subjects",
+        "b": "Multiple words in a sentence must share grammatical features like gender and number",
+        "c": "Agreement is optional in Hindi",
+        "d": "Only adjectives agree with nouns"
+      },
+      "explanations": {
+        "a": "Incorrect. Agreement in Hindi involves more than just subject-verb agreement.",
+        "b": "Correct! In Hindi, agreement requires that multiple words in a sentence share grammatical features. For example, adjectives, verbs, and other modifiers must agree with the noun's gender and number, creating a complex system of morphological relationships.",
+        "c": "Incorrect. Agreement is a fundamental grammatical requirement in Hindi.",
+        "d": "Incorrect. Agreement in Hindi involves multiple word classes, not just adjectives."
+      },
+      "correctAnswer": "b",
+      "difficulty": "advanced"
+    },
+    {
+      "question": "What is the significance of 'sandhi' rules in Hindi morphological analysis?",
+      "answers": {
+        "a": "They determine word order in sentences",
+        "b": "They govern how morphemes combine with sound changes",
+        "c": "They only apply to verb conjugation",
+        "d": "They are optional in modern Hindi"
+      },
+      "explanations": {
+        "a": "Incorrect. Word order is determined by syntax, not sandhi rules.",
+        "b": "Correct! Sandhi rules govern how morphemes combine with sound changes in Hindi. This includes vowel sandhi, consonant sandhi, and visarga sandhi, which affect how words are formed and analyzed morphologically.",
+        "c": "Incorrect. Sandhi rules apply to various morphological processes, not just verb conjugation.",
+        "d": "Incorrect. Sandhi rules are fundamental to Hindi morphology and are not optional."
+      },
+      "correctAnswer": "b",
+      "difficulty": "advanced"
+    },
+    {
+      "question": "In computational Hindi morphology, what is the difference between morphological analysis and morphological generation?",
+      "answers": {
+        "a": "Analysis is for nouns, generation is for verbs",
+        "b": "Analysis breaks down words into morphemes, generation creates word forms from specifications",
+        "c": "Analysis is for written text, generation is for speech",
+        "d": "There is no difference between them"
+      },
+      "explanations": {
+        "a": "Incorrect. Both analysis and generation can apply to various word classes.",
+        "b": "Correct! Morphological analysis breaks down words into their constituent morphemes and identifies grammatical features, while morphological generation creates word forms from roots and grammatical specifications. Both are essential for computational Hindi language processing.",
+        "c": "Incorrect. Both analysis and generation can work with written text and speech.",
+        "d": "Incorrect. Analysis and generation are distinct processes in computational morphology."
+      },
+      "correctAnswer": "b",
+      "difficulty": "advanced"
+    }
+  ]
+} 
