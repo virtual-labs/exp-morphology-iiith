@@ -634,7 +634,7 @@ function handleSubmit() {
     
     // Update header to show "Results" clearly
     if (checkHeader) {
-        checkHeader.innerHTML = '<b>Results</b>';
+    checkHeader.innerHTML = '<b>Results</b>';
     }
 }
 

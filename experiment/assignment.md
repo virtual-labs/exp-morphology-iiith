@@ -17,3 +17,9 @@
 **root**: बाग 	**category**: noun 	**gender**: male 	**number**: singular 	**case**: oblique<br/>
 **root**: बाग 	**category**: noun 	**gender**: male 	**number**: plural 	**case**: direct<br/>
 **root**: बाग 	**category**: noun 	**gender**: male 	**number**: plural 	**case**: oblique
+
+**Word**: घर (ghar) - "house"<br/>
+**root**: घर 	**category**: noun 	**gender**: male 	**number**: singular 	**case**: direct<br/>
+**root**: घर 	**category**: noun 	**gender**: male 	**number**: singular 	**case**: oblique<br/>
+**root**: घर 	**category**: noun 	**gender**: male 	**number**: plural 	**case**: direct<br/>
+**root**: घर 	**category**: noun 	**gender**: male 	**number**: plural 	**case**: oblique
