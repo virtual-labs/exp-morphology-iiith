@@ -57,6 +57,9 @@ class MorphologyAnalyzer {
             console.log('Answers text loaded, first 200 chars:', answersText.substring(0, 200));
             this.parseAnswerOptions(answersText);
 
+            // Validate paradigm data
+            this.validateParadigmData();
+
             this.isInitialized = true;
             console.log('Data loaded successfully');
             console.log('Root words:', Array.from(this.rootWords.entries()));
@@ -99,6 +102,15 @@ class MorphologyAnalyzer {
                 const rootWord = parts[1];
                 // Ensure all transformations are properly trimmed
                 const transformations = parts.slice(2, 10).map(t => t.trim());
+                
+                console.log(`Paradigm ${paradigmId}: root="${rootWord}", transformations=`, transformations);
+                
+                // Check if transformations are all the same (which would be wrong)
+                const uniqueTransformations = [...new Set(transformations)];
+                if (uniqueTransformations.length === 1) {
+                    console.warn(`WARNING: Paradigm ${paradigmId} has all identical transformations: ${uniqueTransformations[0]}`);
+                }
+                
                 this.paradigmData.set(paradigmId, {
                     root: rootWord,
                     transformations: transformations
@@ -179,11 +191,10 @@ class MorphologyAnalyzer {
             return root;
         }
         
-        // For most Hindi words, replace the last character with the transformation
+        // Current logic assumes character replacement
         if (transformation !== 'आ') {
             const baseRoot = root.slice(0, -1);
             const newForm = baseRoot + transformation;
-            console.log(`Transformed: "${root}" -> "${newForm}" (base: "${baseRoot}", suffix: "${transformation}")`);
             return newForm;
         }
         
@@ -198,9 +209,12 @@ class MorphologyAnalyzer {
         if (!paradigm) return [];
 
         // For Add-Delete table, we need to calculate what to delete and what to add
-        // Format: [del_sing_dr, del_plu_dr, del_sing_ob, del_plu_ob, add_sing_dr, add_plu_dr, add_sing_ob, add_plu_ob]
+        // Format: [del_sing_dr, add_sing_dr, del_plu_dr, add_plu_dr, del_sing_ob, add_sing_ob, del_plu_ob, add_plu_ob]
         const transformations = paradigm.transformations;
         const root = paradigm.root;
+        
+        console.log('Root word:', root);
+        console.log('Transformations:', transformations);
         
         // Calculate delete and add operations for each form
         const answers = [];
@@ -210,6 +224,8 @@ class MorphologyAnalyzer {
             const transformation = transformations[i];
             const lastChar = root.slice(-1);
             
+            console.log(`Form ${i}: transformation="${transformation}", lastChar="${lastChar}"`);
+            
             // Delete: what to remove from root (usually the last character)
             let deleteChar = lastChar;
             
@@ -218,11 +234,16 @@ class MorphologyAnalyzer {
             
             // Special cases
             if (!transformation || transformation === '' || transformation === ' ' || transformation === '(none)') {
-                deleteChar = ''; // Nothing to delete
-                addChar = '';    // Nothing to add
+                deleteChar = '(none)'; // Nothing to delete
+                addChar = '(none)';    // Nothing to add
+                console.log(`Form ${i}: No transformation needed, setting both to "(none)"`);
             } else if (transformation === lastChar) {
-                deleteChar = ''; // No change needed
-                addChar = '';    // No change needed
+                deleteChar = '(none)'; // No change needed
+                addChar = '(none)';    // No change needed
+                console.log(`Form ${i}: Transformation matches last char, setting both to "(none)"`);
+            } else {
+                // Normal case: replace last character
+                console.log(`Form ${i}: Normal transformation - delete: "${deleteChar}", add: "${addChar}"`);
             }
             
             answers.push(deleteChar, addChar);
@@ -243,12 +264,64 @@ class MorphologyAnalyzer {
         console.log('Correct answers:', correct);
         
         for (let i = 0; i < 8; i++) {
-            const isCorrect = userAnswers[i] === correct[i];
+            const userAnswer = userAnswers[i];
+            const correctAnswer = correct[i];
+            
+            // Use the same validation logic as isAnswerCorrect
+            const isCorrect = this.isAnswerCorrect(userAnswer, correctAnswer);
+            
             results.push(isCorrect);
-            console.log(`Answer ${i}: ${userAnswers[i]} vs ${correct[i]} = ${isCorrect}`);
+            console.log(`Answer ${i}: "${userAnswer}" vs "${correctAnswer}" = ${isCorrect}`);
         }
         
         return results;
+    }
+
+    // Helper function to check if an answer is correct
+    isAnswerCorrect(userAnswer, correctAnswer) {
+        // If user hasn't selected anything, it's always incorrect
+        if (userAnswer === '' || userAnswer === 'Select...') {
+            return false;
+        }
+        
+        if (userAnswer === correctAnswer) {
+            return true;
+        }
+        
+        // Handle special case where "(none)" and empty string should be equivalent
+        if ((userAnswer === '(none)') && 
+            (correctAnswer === '' || correctAnswer === '(none)' || correctAnswer === 'Select...')) {
+            return true;
+        }
+        
+        return false;
+    }
+
+    // Validate paradigm data for consistency
+    validateParadigmData() {
+        console.log('Validating paradigm data...');
+        for (const [paradigmId, paradigm] of this.paradigmData.entries()) {
+            const transformations = paradigm.transformations;
+            const root = paradigm.root;
+
+            // Check if transformations are all the same
+            const uniqueTransformations = [...new Set(transformations)];
+            if (uniqueTransformations.length === 1) {
+                console.warn(`WARNING: Paradigm ${paradigmId} has all identical transformations: ${uniqueTransformations[0]}. This might indicate a problem.`);
+            }
+
+            // Check if transformations are valid (e.g., not empty, not just spaces)
+            if (transformations.some(t => t === '' || t === ' ' || t === '(none)')) {
+                console.warn(`WARNING: Paradigm ${paradigmId} has invalid transformations: ${transformations.join(', ')}.`);
+            }
+
+            // Check if transformations are consistent with root word
+            const lastChar = root.slice(-1);
+            if (transformations.some(t => t !== lastChar && t !== 'आ')) {
+                console.warn(`WARNING: Paradigm ${paradigmId} has transformations that do not match the last character of root "${root}" or are not 'आ'. Transformations: ${transformations.join(', ')}.`);
+            }
+        }
+        console.log('Paradigm data validation complete.');
     }
 }
 
@@ -361,10 +434,7 @@ function handleRootSelection() {
 // Show paradigm table
 function showParadigmTable(rootWord) {
     const wordForms = analyzer.generateWordFormsTable(rootWord);
-    if (!wordForms) {
-        console.error('No word forms generated for:', rootWord);
-        return;
-    }
+    if (!wordForms) return null;
 
     console.log('Generating paradigm table for:', rootWord);
     console.log('Word forms:', wordForms);
@@ -536,6 +606,13 @@ function handleSubmit() {
 
     console.log('User answers collected:', userAnswers);
 
+    // Check if all fields are filled
+    const emptyFields = userAnswers.filter(answer => answer === '' || answer === 'Select...');
+    if (emptyFields.length > 0) {
+        showFeedback('❌ Please fill in all fields before submitting. You have ' + emptyFields.length + ' unanswered questions.', 'error');
+        return;
+    }
+
     analyzer.userAnswers = userAnswers;
     const results = analyzer.checkAnswers(userAnswers);
     
@@ -588,14 +665,15 @@ function updateCheckResults(results) {
         if (deleteSelects[i]) {
             const userValue = deleteSelects[i].value;
             const correctValue = analyzer.correctAnswers[i * 2];
-            const isCorrect = userValue === correctValue;
+            const isCorrect = analyzer.isAnswerCorrect(userValue, correctValue);
             
             // Remove existing classes
             deleteSelects[i].classList.remove('correct', 'incorrect');
             deleteSelects[i].style.backgroundColor = '';
             deleteSelects[i].style.borderColor = '';
             
-            if (userValue !== '') {
+            // Always show styling for answered questions
+            if (userValue !== '' && userValue !== 'Select...') {
                 if (isCorrect) {
                     deleteSelects[i].classList.add('correct');
                     deleteSelects[i].style.backgroundColor = '#e8f5e9';
@@ -605,20 +683,26 @@ function updateCheckResults(results) {
                     deleteSelects[i].style.backgroundColor = '#ffebee';
                     deleteSelects[i].style.borderColor = '#f44336';
                 }
+            } else {
+                // No selection made - mark as incorrect
+                deleteSelects[i].classList.add('incorrect');
+                deleteSelects[i].style.backgroundColor = '#ffebee';
+                deleteSelects[i].style.borderColor = '#f44336';
             }
         }
         
         if (addSelects[i]) {
             const userValue = addSelects[i].value;
             const correctValue = analyzer.correctAnswers[i * 2 + 1];
-            const isCorrect = userValue === correctValue;
+            const isCorrect = analyzer.isAnswerCorrect(userValue, correctValue);
             
             // Remove existing classes
             addSelects[i].classList.remove('correct', 'incorrect');
             addSelects[i].style.backgroundColor = '';
             addSelects[i].style.borderColor = '';
             
-            if (userValue !== '') {
+            // Always show styling for answered questions
+            if (userValue !== '' && userValue !== 'Select...') {
                 if (isCorrect) {
                     addSelects[i].classList.add('correct');
                     addSelects[i].style.backgroundColor = '#e8f5e9';
@@ -628,14 +712,21 @@ function updateCheckResults(results) {
                     addSelects[i].style.backgroundColor = '#ffebee';
                     addSelects[i].style.borderColor = '#f44336';
                 }
+            } else {
+                // No selection made - mark as incorrect
+                addSelects[i].classList.add('incorrect');
+                addSelects[i].style.backgroundColor = '#ffebee';
+                addSelects[i].style.borderColor = '#f44336';
             }
         }
         
         // Update check cell - both delete and add must be correct
         if (deleteCorrect && addCorrect) {
             checkCell.innerHTML = '<i class="fas fa-check-circle" style="color: #4CAF50; font-size: 1.2em;"></i>';
+            console.log(`Row ${i}: Both delete and add correct - showing green checkmark`);
         } else {
             checkCell.innerHTML = '<i class="fas fa-times-circle" style="color: #F44336; font-size: 1.2em;"></i>';
+            console.log(`Row ${i}: Delete correct: ${deleteCorrect}, Add correct: ${addCorrect} - showing red X`);
         }
     }
 }
