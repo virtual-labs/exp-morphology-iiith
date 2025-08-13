@@ -11,10 +11,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div class="simulation-container">
+    <div class="container">
         <div class="main-content">
             <!-- Instructions Panel -->
-            <div class="instructions-bar">
+            <div class="instructions-panel">
                 <div class="instructions-header clickable" id="instructionsTab">
                     <h3>Instructions</h3>
                     <i class="fas fa-chevron-down arrow-icon"></i>
@@ -23,7 +23,7 @@
                     <ul class="instructions-list">
                         <li><strong>Step 1:</strong> Select a root word from the dropdown menu.</li>
                         <li><strong>Step 2:</strong> Study the paradigm table showing different word forms.</li>
-                        <li><strong>Step 3:</strong> Complete the Add-Delete table by selecting the correct morphological transformations:
+                        <li><strong>Step 3:</strong> Complete the Add-Delete table by selecting the correct transformations:
                             <ul style="margin-left: 1.5em; margin-top: 0.3em;">
                                 <li><strong>Delete:</strong> What to remove from the root word</li>
                                 <li><strong>Add:</strong> What to add to create the new form</li>
@@ -36,21 +36,20 @@
                 </div>
             </div>
 
-            <!-- Three-column layout -->
             <div class="three-pane-layout">
                 <!-- Pane 1: Root Selection -->
-                <div class="pane pane-1">
-                    <div class="pane-header">
-                        <h3>Select Root Word</h3>
-                        <i class="fas fa-info-circle" title="Choose a Hindi root word to analyze"></i>
+                <div class="pane pane-left">
+                    <div class="step-header">
+                        <span class="step-title">Select Root Word</span>
+                        <span class="info-icon" tabindex="0" title="Choose a Hindi root word to analyze">
+                            <i class="fas fa-info-circle"></i>
+                        </span>
                     </div>
-                    <div class="selection-block">
-                        <div class="form-group">
-                            <label for="rootSelection">Root Word</label>
-                            <select id="rootSelection" class="form-select">
-                                <option value="">Select a root word...</option>
-                            </select>
-                        </div>
+                    <div class="word-selection-block">
+                        <label for="rootSelection" class="pane-label">Root Word</label>
+                        <select id="rootSelection" class="select-box">
+                            <option value="">Select a root word...</option>
+                        </select>
                     </div>
                     
                     <!-- Paradigm Display Section -->
@@ -61,10 +60,12 @@
                 </div>
 
                 <!-- Pane 2: Add-Delete Table -->
-                <div class="pane pane-2">
-                    <div class="pane-header">
-                        <h3>Fill the Add-Delete Table</h3>
-                        <i class="fas fa-info-circle" title="Complete the morphological transformations"></i>
+                <div class="pane pane-middle">
+                    <div class="step-header">
+                        <span class="step-title">Fill the Add-Delete Table</span>
+                        <span class="info-icon" tabindex="0" title="Complete the morphological transformations">
+                            <i class="fas fa-info-circle"></i>
+                        </span>
                     </div>
                     
                     <div id="addDeleteSection" class="add-delete-section" style="display: none;">
@@ -75,7 +76,7 @@
                                     <th>Add</th>
                                     <th>Number</th>
                                     <th>Case</th>
-                                    <th id="checkHeader">Check</th>
+                                    <th id="checkHeader">Result</th>
                                 </tr>
                             </thead>
                             <tbody id="addDeleteTableBody">
@@ -86,14 +87,16 @@
                 </div>
 
                 <!-- Pane 3: Check and Learn -->
-                <div class="pane pane-3">
-                    <div class="pane-header">
-                        <h3>Check and Learn</h3>
-                        <i class="fas fa-info-circle" title="Verify your answers and learn"></i>
+                <div class="pane pane-right">
+                    <div class="step-header">
+                        <span class="step-title">Check and Learn</span>
+                        <span class="info-icon" tabindex="0" title="Verify your answers and learn">
+                            <i class="fas fa-info-circle"></i>
+                        </span>
                     </div>
                     
                     <!-- Control Buttons -->
-                    <div class="button-group">
+                    <div class="button-container">
                         <button id="submitButton" class="primary-button" disabled>
                             <i class="fas fa-check"></i> Submit
                         </button>

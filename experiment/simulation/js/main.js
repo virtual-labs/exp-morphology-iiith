@@ -197,19 +197,41 @@ class MorphologyAnalyzer {
         const paradigm = this.getParadigm(rootWord);
         if (!paradigm) return [];
 
-        // Return the transformations as correct answers
+        // For Add-Delete table, we need to calculate what to delete and what to add
         // Format: [del_sing_dr, del_plu_dr, del_sing_ob, del_plu_ob, add_sing_dr, add_plu_dr, add_sing_ob, add_plu_ob]
         const transformations = paradigm.transformations;
-        return [
-            transformations[0], // delete singular direct
-            transformations[2], // delete plural direct  
-            transformations[1], // delete singular oblique
-            transformations[3], // delete plural oblique
-            transformations[0], // add singular direct
-            transformations[2], // add plural direct
-            transformations[1], // add singular oblique
-            transformations[3]  // add plural oblique
-        ];
+        const root = paradigm.root;
+        
+        // Calculate delete and add operations for each form
+        const answers = [];
+        
+        // For each transformation, calculate what to delete and what to add
+        for (let i = 0; i < 4; i++) {
+            const transformation = transformations[i];
+            const lastChar = root.slice(-1);
+            
+            // Delete: what to remove from root (usually the last character)
+            let deleteChar = lastChar;
+            
+            // Add: what to add to create the new form
+            let addChar = transformation;
+            
+            // Special cases
+            if (!transformation || transformation === '' || transformation === ' ' || transformation === '(none)') {
+                deleteChar = ''; // Nothing to delete
+                addChar = '';    // Nothing to add
+            } else if (transformation === lastChar) {
+                deleteChar = ''; // No change needed
+                addChar = '';    // No change needed
+            }
+            
+            answers.push(deleteChar, addChar);
+        }
+        
+        console.log('Generated Add-Delete answers:', answers);
+        console.log('Root:', root, 'Transformations:', transformations);
+        
+        return answers;
     }
 
     // Check user answers
@@ -388,6 +410,11 @@ function showAddDeleteTable() {
 
     console.log('Creating add-delete table with options:', analyzer.answerOptions);
 
+    // Set the header text to "Results"
+    if (checkHeader) {
+        checkHeader.innerHTML = '<b>Results</b>';
+    }
+
     let tableHTML = '';
     categories.forEach((cat, index) => {
         tableHTML += `
@@ -406,7 +433,7 @@ function showAddDeleteTable() {
                 </td>
                 <td>${cat.fullNumber}</td>
                 <td>${cat.fullCase}</td>
-                <td id="check${index}" class="check-cell"></td>
+                <td id="check${index}" class="check-cell">-</td>
             </tr>
         `;
     });
@@ -441,11 +468,12 @@ function setupDropdownEventListeners() {
         document.getElementById('addpluob')
     ];
     
-    // Add change event listeners to all dropdowns
+    // Add change event listeners to all dropdowns - but don't update colors in real-time
     [...deleteSelects, ...addSelects].forEach((select, index) => {
         if (select) {
             select.addEventListener('change', () => {
-                updateDropdownColor(select, index);
+                // Don't update colors in real-time - only after submit
+                // updateDropdownColor(select, index);
             });
         }
     });
@@ -493,16 +521,17 @@ function handleSubmit() {
         return;
     }
 
-    // Collect user answers
+    // Collect user answers in Add-Delete format
+    // Format: [del_sing_dr, add_sing_dr, del_plu_dr, add_plu_dr, del_sing_ob, add_sing_ob, del_plu_ob, add_plu_ob]
     const userAnswers = [
-        document.getElementById('delsingdr').value,
-        document.getElementById('delpludr').value,
-        document.getElementById('delsingob').value,
-        document.getElementById('delpluob').value,
-        document.getElementById('addsingdr').value,
-        document.getElementById('addpludr').value,
-        document.getElementById('addsingob').value,
-        document.getElementById('addpluob').value
+        document.getElementById('delsingdr').value,    // Delete singular direct
+        document.getElementById('addsingdr').value,    // Add singular direct
+        document.getElementById('delpludr').value,     // Delete plural direct
+        document.getElementById('addpludr').value,     // Add plural direct
+        document.getElementById('delsingob').value,    // Delete singular oblique
+        document.getElementById('addsingob').value,    // Add singular oblique
+        document.getElementById('delpluob').value,     // Delete plural oblique
+        document.getElementById('addpluob').value      // Add plural oblique
     ];
 
     console.log('User answers collected:', userAnswers);
@@ -526,7 +555,10 @@ function handleSubmit() {
         getAnswerButton.disabled = false;
     }
     
-    checkHeader.innerHTML = '<b>Results</b>';
+    // Update header to show "Results" clearly
+    if (checkHeader) {
+        checkHeader.innerHTML = '<b>Results</b>';
+    }
 }
 
 // Update check results in the table
@@ -546,22 +578,60 @@ function updateCheckResults(results) {
         document.getElementById('addpluob')
     ];
     
-    // Update visual feedback for dropdowns
+    // Update visual feedback for dropdowns - only after submit
     for (let i = 0; i < 4; i++) {
         const checkCell = document.getElementById(`check${i}`);
-        const deleteCorrect = results[i];
-        const addCorrect = results[i + 4];
+        const deleteCorrect = results[i * 2];     // Delete answer (even indices: 0, 2, 4, 6)
+        const addCorrect = results[i * 2 + 1];   // Add answer (odd indices: 1, 3, 5, 7)
         
-        // Update dropdown styles - use the new color system
+        // Update dropdown styles - highlight wrong answers after submit
         if (deleteSelects[i]) {
-            updateDropdownColor(deleteSelects[i], i);
+            const userValue = deleteSelects[i].value;
+            const correctValue = analyzer.correctAnswers[i * 2];
+            const isCorrect = userValue === correctValue;
+            
+            // Remove existing classes
+            deleteSelects[i].classList.remove('correct', 'incorrect');
+            deleteSelects[i].style.backgroundColor = '';
+            deleteSelects[i].style.borderColor = '';
+            
+            if (userValue !== '') {
+                if (isCorrect) {
+                    deleteSelects[i].classList.add('correct');
+                    deleteSelects[i].style.backgroundColor = '#e8f5e9';
+                    deleteSelects[i].style.borderColor = '#4CAF50';
+                } else {
+                    deleteSelects[i].classList.add('incorrect');
+                    deleteSelects[i].style.backgroundColor = '#ffebee';
+                    deleteSelects[i].style.borderColor = '#f44336';
+                }
+            }
         }
         
         if (addSelects[i]) {
-            updateDropdownColor(addSelects[i], i + 4);
+            const userValue = addSelects[i].value;
+            const correctValue = analyzer.correctAnswers[i * 2 + 1];
+            const isCorrect = userValue === correctValue;
+            
+            // Remove existing classes
+            addSelects[i].classList.remove('correct', 'incorrect');
+            addSelects[i].style.backgroundColor = '';
+            addSelects[i].style.borderColor = '';
+            
+            if (userValue !== '') {
+                if (isCorrect) {
+                    addSelects[i].classList.add('correct');
+                    addSelects[i].style.backgroundColor = '#e8f5e9';
+                    addSelects[i].style.borderColor = '#4CAF50';
+                } else {
+                    addSelects[i].classList.add('incorrect');
+                    addSelects[i].style.backgroundColor = '#ffebee';
+                    addSelects[i].style.borderColor = '#f44336';
+                }
+            }
         }
         
-        // Update check cell
+        // Update check cell - both delete and add must be correct
         if (deleteCorrect && addCorrect) {
             checkCell.innerHTML = '<i class="fas fa-check-circle" style="color: #4CAF50; font-size: 1.2em;"></i>';
         } else {
@@ -597,17 +667,19 @@ function showCorrectAnswers() {
     `;
 
     const categories = [
-        { number: 'Singular', case: 'Direct' },
-        { number: 'Plural', case: 'Direct' },
-        { number: 'Singular', case: 'Oblique' },
-        { number: 'Plural', case: 'Oblique' }
+        { number: 'Singular', case: 'Direct', index: 0 },
+        { number: 'Plural', case: 'Direct', index: 1 },
+        { number: 'Singular', case: 'Oblique', index: 2 },
+        { number: 'Plural', case: 'Oblique', index: 3 }
     ];
 
     categories.forEach((cat, index) => {
+        const deleteIndex = index * 2;
+        const addIndex = index * 2 + 1;
         answerHTML += `
             <tr>
-                <td>${analyzer.correctAnswers[index]}</td>
-                <td>${analyzer.correctAnswers[index + 4]}</td>
+                <td>${analyzer.correctAnswers[deleteIndex] || '(none)'}</td>
+                <td>${analyzer.correctAnswers[addIndex] || '(none)'}</td>
                 <td>${cat.number}</td>
                 <td>${cat.case}</td>
             </tr>
@@ -634,7 +706,11 @@ function resetSimulation() {
     analyzer.userAnswers = [];
     submitButton.disabled = true;
     getAnswerButton.style.display = 'none';
-    checkHeader.innerHTML = '';
+    
+    // Set header to show "Results"
+    if (checkHeader) {
+        checkHeader.innerHTML = '<b>Results</b>';
+    }
     
     // Clear correct answer display
     correctAnswer.innerHTML = '';
@@ -658,13 +734,17 @@ function clearFeedback() {
 function clearResults() {
     correctAnswer.innerHTML = '';
     correctAnswer.style.display = 'none';
-    checkHeader.innerHTML = '';
     
-    // Clear check marks
+    // Reset header to show "Results"
+    if (checkHeader) {
+        checkHeader.innerHTML = '<b>Results</b>';
+    }
+    
+    // Clear check marks and show placeholder text
     for (let i = 0; i < 4; i++) {
         const checkCell = document.getElementById(`check${i}`);
         if (checkCell) {
-            checkCell.innerHTML = '';
+            checkCell.innerHTML = '-';
         }
     }
     
