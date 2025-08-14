@@ -57,9 +57,6 @@ class MorphologyAnalyzer {
             console.log('Answers text loaded, first 200 chars:', answersText.substring(0, 200));
             this.parseAnswerOptions(answersText);
 
-            // Validate paradigm data
-            this.validateParadigmData();
-
             this.isInitialized = true;
             console.log('Data loaded successfully');
             console.log('Root words:', Array.from(this.rootWords.entries()));
@@ -100,22 +97,14 @@ class MorphologyAnalyzer {
             if (parts.length >= 10) {
                 const paradigmId = parts[0];
                 const rootWord = parts[1];
-                // Ensure all transformations are properly trimmed
-                const transformations = parts.slice(2, 10).map(t => t.trim());
-                
-                console.log(`Paradigm ${paradigmId}: root="${rootWord}", transformations=`, transformations);
-                
-                // Check if transformations are all the same (which would be wrong)
-                const uniqueTransformations = [...new Set(transformations)];
-                if (uniqueTransformations.length === 1) {
-                    console.warn(`WARNING: Paradigm ${paradigmId} has all identical transformations: ${uniqueTransformations[0]}`);
-                }
-                
+                const tokens = parts.slice(2, 10).map(t => t.trim());
+                const deletes = tokens.slice(0, 4);
+                const adds = tokens.slice(4, 8);
                 this.paradigmData.set(paradigmId, {
                     root: rootWord,
-                    transformations: transformations
+                    transformations: { deletes, adds }
                 });
-                console.log(`Added paradigm ${paradigmId}: root="${rootWord}", transformations=`, transformations);
+                console.log(`Added paradigm ${paradigmId}: root="${rootWord}", deletes=`, deletes, 'adds=', adds);
             } else {
                 console.warn(`Line ${lineIndex + 1} has insufficient parts (${parts.length}):`, parts);
             }
@@ -144,7 +133,7 @@ class MorphologyAnalyzer {
         
         if (paradigmId) {
             const paradigm = this.paradigmData.get(paradigmId);
-            console.log(`Found paradigm:`, paradigm);
+            console.log('Found paradigm:', paradigm);
             return paradigm;
         }
         return null;
@@ -155,52 +144,49 @@ class MorphologyAnalyzer {
         const paradigm = this.getParadigm(rootWord);
         if (!paradigm) return null;
 
+        const deletes = paradigm.transformations.deletes;
+        const adds = paradigm.transformations.adds;
+
         const forms = [
-            { number: 'Singular', case: 'Direct', transformIndex: 0 },
-            { number: 'Singular', case: 'Oblique', transformIndex: 1 },
-            { number: 'Plural', case: 'Direct', transformIndex: 2 },
-            { number: 'Plural', case: 'Oblique', transformIndex: 3 }
+            { number: 'Singular', case: 'Direct', index: 0 },
+            { number: 'Singular', case: 'Oblique', index: 1 },
+            { number: 'Plural', case: 'Direct', index: 2 },
+            { number: 'Plural', case: 'Oblique', index: 3 }
         ];
 
         return forms.map(form => ({
-            word: this.generateWordForm(rootWord, paradigm.transformations[form.transformIndex]),
+            word: this.applyDeleteAdd(rootWord, deletes[form.index], adds[form.index]),
             root: rootWord,
             number: form.number,
             case: form.case,
-            transformation: paradigm.transformations[form.transformIndex]
+            transformation: { del: deletes[form.index], add: adds[form.index] }
         }));
     }
 
-    // Generate word form by applying suffix transformation
-    generateWordForm(root, transformation) {
-        // For Hindi morphology, we need to handle different transformation patterns
-        console.log(`Generating word form: root="${root}", transformation="${transformation}"`);
-        
-        // Handle special cases
-        if (!transformation || transformation === '' || transformation === ' ' || transformation === '(none)') {
-            console.log('No transformation needed, returning root');
-            return root;
+    // Apply delete + add to form the target word
+    applyDeleteAdd(root, delSuffix, addSuffix) {
+        console.log(`Generating word form: root="${root}", delete="${delSuffix}", add="${addSuffix}"`);
+        const NONE = '(none)';
+        const shouldDelete = delSuffix && delSuffix !== NONE;
+        const shouldAdd = addSuffix && addSuffix !== NONE;
+
+        let base = root;
+        if (shouldDelete) {
+            if (root.endsWith(delSuffix)) {
+                base = root.slice(0, root.length - delSuffix.length);
+                console.log(`Deleted suffix "${delSuffix}": "${root}" -> "${base}"`);
+            } else {
+                console.log(`Delete suffix "${delSuffix}" not found at end of "${root}". Leaving root unchanged.`);
+            }
         }
-        
-        // If transformation is same as root ending, no change needed
-        const lastChar = root.slice(-1);
-        console.log(`Last char of root: "${lastChar}"`);
-        
-        if (transformation === lastChar) {
-            console.log('Transformation matches last char, returning root');
-            return root;
+
+        if (shouldAdd) {
+            const result = base + addSuffix;
+            console.log(`Added suffix "${addSuffix}": "${base}" -> "${result}"`);
+            return result;
         }
-        
-        // Current logic assumes character replacement
-        if (transformation !== 'आ') {
-            const baseRoot = root.slice(0, -1);
-            const newForm = baseRoot + transformation;
-            return newForm;
-        }
-        
-        // If transformation is 'आ', return root as is
-        console.log('Transformation is आ, returning root');
-        return root;
+
+        return base;
     }
 
     // Get correct answers for current paradigm
@@ -208,51 +194,17 @@ class MorphologyAnalyzer {
         const paradigm = this.getParadigm(rootWord);
         if (!paradigm) return [];
 
-        // For Add-Delete table, we need to calculate what to delete and what to add
-        // Format: [del_sing_dr, add_sing_dr, del_plu_dr, add_plu_dr, del_sing_ob, add_sing_ob, del_plu_ob, add_plu_ob]
-        const transformations = paradigm.transformations;
-        const root = paradigm.root;
-        
-        console.log('Root word:', root);
-        console.log('Transformations:', transformations);
-        
-        // Calculate delete and add operations for each form
-        const answers = [];
-        
-        // For each transformation, calculate what to delete and what to add
-        for (let i = 0; i < 4; i++) {
-            const transformation = transformations[i];
-            const lastChar = root.slice(-1);
-            
-            console.log(`Form ${i}: transformation="${transformation}", lastChar="${lastChar}"`);
-            
-            // Delete: what to remove from root (usually the last character)
-            let deleteChar = lastChar;
-            
-            // Add: what to add to create the new form
-            let addChar = transformation;
-            
-            // Special cases
-            if (!transformation || transformation === '' || transformation === ' ' || transformation === '(none)') {
-                deleteChar = '(none)'; // Nothing to delete
-                addChar = '(none)';    // Nothing to add
-                console.log(`Form ${i}: No transformation needed, setting both to "(none)"`);
-            } else if (transformation === lastChar) {
-                deleteChar = '(none)'; // No change needed
-                addChar = '(none)';    // No change needed
-                console.log(`Form ${i}: Transformation matches last char, setting both to "(none)"`);
-            } else {
-                // Normal case: replace last character
-                console.log(`Form ${i}: Normal transformation - delete: "${deleteChar}", add: "${addChar}"`);
-            }
-            
-            answers.push(deleteChar, addChar);
-        }
-        
-        console.log('Generated Add-Delete answers:', answers);
-        console.log('Root:', root, 'Transformations:', transformations);
-        
-        return answers;
+        const { deletes, adds } = paradigm.transformations;
+        return [
+            deletes[0], // delete singular direct
+            adds[0],    // add singular direct
+            deletes[1], // delete singular oblique
+            adds[1],    // add singular oblique
+            deletes[2], // delete plural direct
+            adds[2],    // add plural direct
+            deletes[3], // delete plural oblique
+            adds[3]     // add plural oblique
+        ];
     }
 
     // Check user answers
@@ -264,14 +216,9 @@ class MorphologyAnalyzer {
         console.log('Correct answers:', correct);
         
         for (let i = 0; i < 8; i++) {
-            const userAnswer = userAnswers[i];
-            const correctAnswer = correct[i];
-            
-            // Use the same validation logic as isAnswerCorrect
-            const isCorrect = this.isAnswerCorrect(userAnswer, correctAnswer);
-            
+            const isCorrect = userAnswers[i] === correct[i];
             results.push(isCorrect);
-            console.log(`Answer ${i}: "${userAnswer}" vs "${correctAnswer}" = ${isCorrect}`);
+            console.log(`Answer ${i}: ${userAnswers[i]} vs ${correct[i]} = ${isCorrect}`);
         }
         
         return results;
@@ -301,25 +248,24 @@ class MorphologyAnalyzer {
     validateParadigmData() {
         console.log('Validating paradigm data...');
         for (const [paradigmId, paradigm] of this.paradigmData.entries()) {
-            const transformations = paradigm.transformations;
+            const { deletes, adds } = paradigm.transformations;
             const root = paradigm.root;
 
-            // Check if transformations are all the same
-            const uniqueTransformations = [...new Set(transformations)];
-            if (uniqueTransformations.length === 1) {
-                console.warn(`WARNING: Paradigm ${paradigmId} has all identical transformations: ${uniqueTransformations[0]}. This might indicate a problem.`);
+            // Basic sanity checks
+            if (!Array.isArray(deletes) || !Array.isArray(adds) || deletes.length !== 4 || adds.length !== 4) {
+                console.warn(`WARNING: Paradigm ${paradigmId} has malformed transformations.`);
+                continue;
             }
 
-            // Check if transformations are valid (e.g., not empty, not just spaces)
-            if (transformations.some(t => t === '' || t === ' ' || t === '(none)')) {
-                console.warn(`WARNING: Paradigm ${paradigmId} has invalid transformations: ${transformations.join(', ')}.`);
-            }
+            // Ensure tokens are non-empty strings ("(none)" is allowed)
+            [...deletes, ...adds].forEach(tok => {
+                if (typeof tok !== 'string' || tok.length === 0) {
+                    console.warn(`WARNING: Paradigm ${paradigmId} contains an empty transformation token.`);
+                }
+            });
 
-            // Check if transformations are consistent with root word
-            const lastChar = root.slice(-1);
-            if (transformations.some(t => t !== lastChar && t !== 'आ')) {
-                console.warn(`WARNING: Paradigm ${paradigmId} has transformations that do not match the last character of root "${root}" or are not 'आ'. Transformations: ${transformations.join(', ')}.`);
-            }
+            // Log useful info
+            console.log(`Paradigm ${paradigmId}: root="${root}", deletes=${JSON.stringify(deletes)}, adds=${JSON.stringify(adds)}`);
         }
         console.log('Paradigm data validation complete.');
     }
@@ -473,8 +419,8 @@ function showParadigmTable(rootWord) {
 function showAddDeleteTable() {
     const categories = [
         { number: 'sing', case: 'dr', label: 'Singular Direct', fullNumber: 'Singular', fullCase: 'Direct' },
-        { number: 'plu', case: 'dr', label: 'Plural Direct', fullNumber: 'Plural', fullCase: 'Direct' },
         { number: 'sing', case: 'ob', label: 'Singular Oblique', fullNumber: 'Singular', fullCase: 'Oblique' },
+        { number: 'plu', case: 'dr', label: 'Plural Direct', fullNumber: 'Plural', fullCase: 'Direct' },
         { number: 'plu', case: 'ob', label: 'Plural Oblique', fullNumber: 'Plural', fullCase: 'Oblique' }
     ];
 
@@ -526,15 +472,15 @@ function showAddDeleteTable() {
 function setupDropdownEventListeners() {
     const deleteSelects = [
         document.getElementById('delsingdr'),
-        document.getElementById('delpludr'),
         document.getElementById('delsingob'),
+        document.getElementById('delpludr'),
         document.getElementById('delpluob')
     ];
     
     const addSelects = [
         document.getElementById('addsingdr'),
-        document.getElementById('addpludr'),
         document.getElementById('addsingob'),
+        document.getElementById('addpludr'),
         document.getElementById('addpluob')
     ];
     
@@ -592,14 +538,14 @@ function handleSubmit() {
     }
 
     // Collect user answers in Add-Delete format
-    // Format: [del_sing_dr, add_sing_dr, del_plu_dr, add_plu_dr, del_sing_ob, add_sing_ob, del_plu_ob, add_plu_ob]
+    // Format: [del_sing_dr, add_sing_dr, del_sing_ob, add_sing_ob, del_plu_dr, add_plu_dr, del_plu_ob, add_plu_ob]
     const userAnswers = [
         document.getElementById('delsingdr').value,    // Delete singular direct
         document.getElementById('addsingdr').value,    // Add singular direct
-        document.getElementById('delpludr').value,     // Delete plural direct
-        document.getElementById('addpludr').value,     // Add plural direct
         document.getElementById('delsingob').value,    // Delete singular oblique
         document.getElementById('addsingob').value,    // Add singular oblique
+        document.getElementById('delpludr').value,     // Delete plural direct
+        document.getElementById('addpludr').value,     // Add plural direct
         document.getElementById('delpluob').value,     // Delete plural oblique
         document.getElementById('addpluob').value      // Add plural oblique
     ];
@@ -643,15 +589,15 @@ function updateCheckResults(results) {
     // Get all select elements
     const deleteSelects = [
         document.getElementById('delsingdr'),
-        document.getElementById('delpludr'),
         document.getElementById('delsingob'),
+        document.getElementById('delpludr'),
         document.getElementById('delpluob')
     ];
     
     const addSelects = [
         document.getElementById('addsingdr'),
-        document.getElementById('addpludr'),
         document.getElementById('addsingob'),
+        document.getElementById('addpludr'),
         document.getElementById('addpluob')
     ];
     
@@ -759,8 +705,8 @@ function showCorrectAnswers() {
 
     const categories = [
         { number: 'Singular', case: 'Direct', index: 0 },
-        { number: 'Plural', case: 'Direct', index: 1 },
-        { number: 'Singular', case: 'Oblique', index: 2 },
+        { number: 'Singular', case: 'Oblique', index: 1 },
+        { number: 'Plural', case: 'Direct', index: 2 },
         { number: 'Plural', case: 'Oblique', index: 3 }
     ];
 
