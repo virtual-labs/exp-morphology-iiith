@@ -29,8 +29,8 @@ Morphological analysis is a fundamental concept in linguistics and Natural Langu
 Hindi words can be analyzed according to several grammatical features:
 
 ##### **Gender (लिंग)**
-- **Masculine (पुल्लिंग)**: लड़का (ladkaa - "boy"), पुस्तक (pustak - "book")
-- **Feminine (स्त्रीलिंग)**: लड़की (ladkii - "girl"), किताब (kitaab - "book")
+- **Masculine (पुल्लिंग)**: लड़का (ladkaa - "boy"), घर (ghar - "house"), मकान (makaan - "house"), बाजार (bazaar - "market")
+- **Feminine (स्त्रीलिंग)**: लड़की (ladkii - "girl"), पुस्तक (pustak - "book"), किताब (kitaab - "book"), मेज (mej - "table"), कुर्सी (kursi - "chair"), खिड़की (khidki - "window"), दुकान (dukaan - "shop")
 
 ##### **Number (वचन)**
 - **Singular (एकवचन)**: बच्चा (bachchaa - "child")
@@ -105,12 +105,36 @@ Words that follow similar morphological patterns belong to the same paradigm cla
 - बच्चा (bachchaa - "child")
 - लड़का (ladkaa - "boy")
 - मकान (makaan - "house")
+- कमरा (kamraa - "room")
+- दरवाजा (darwaazaa - "door")
+- तकिया (takiyyaa - "pillow")
+- कपड़ा (kapdaa - "cloth")
+- बगीचा (bagichaa - "garden")
 
 ##### **Class 2: Feminine Nouns ending in -ई**
 - लड़की (ladkii - "girl")
-- किताबी (kitaabii - "bookish")
+- आदमी (aadmii - "person")
+- गाड़ी (gaadii - "vehicle")
+- खिड़की (khidkii - "window")
+- कुर्सी (kursii - "chair")
 
-##### **Class 3: Invariant Nouns**
+##### **Class 3: Feminine Nouns ending in -त/क**
+- पुस्तक (pustak - "book")
+- किताब (kitaab - "book")
+- मेज (mej - "table")
+- चादर (chaadar - "sheet")
+- दुकान (dukaan - "shop")
+
+##### **Class 4: Masculine Nouns ending in consonants**
+- घर (ghar - "house")
+- पेड़ (ped - "tree")
+- फूल (phool - "flower")
+- बिस्तर (bistar - "bed")
+- स्कूल (school - "school")
+- अस्पताल (aspataal - "hospital")
+- बाजार (bazaar - "market")
+
+##### **Class 5: Invariant Nouns (Neuter)**
 - पानी (paanii - "water")
 - दूध (duudh - "milk")
 - चाय (chaay - "tea")
@@ -176,5 +200,11 @@ Morphological analysis in Hindi requires understanding of:
 - **Paradigm Classes**: How similar words follow consistent patterns
 - **Add-Delete Methodology**: Systematic approach to morphological transformation
 - **Pattern Recognition**: Identifying consistent morphological behaviors
+
+**Important Note on Gender Classification**: 
+- **पुस्तक (pustak)** is **feminine** in Hindi, not masculine as commonly assumed
+- **किताब (kitaab)** is also **feminine** 
+- Gender classification follows Hindi linguistic rules, not English translations
+- Words ending in -आ are typically masculine, while words ending in -त/क are typically feminine
 
 This theoretical foundation provides the basis for practical morphological analysis using the interactive simulation, where students can apply these concepts to real Hindi words and develop computational thinking skills for linguistic analysis.
