@@ -166,7 +166,7 @@ class MorphologyAnalyzer {
     // Apply delete + add to form the target word
     applyDeleteAdd(root, delSuffix, addSuffix) {
         console.log(`Generating word form: root="${root}", delete="${delSuffix}", add="${addSuffix}"`);
-        const NONE = '(none)';
+        const NONE = 'none';
         const shouldDelete = delSuffix && delSuffix !== NONE;
         const shouldAdd = addSuffix && addSuffix !== NONE;
 
@@ -235,9 +235,9 @@ class MorphologyAnalyzer {
             return true;
         }
         
-        // Handle special case where "(none)" and empty string should be equivalent
-        if ((userAnswer === '(none)') && 
-            (correctAnswer === '' || correctAnswer === '(none)' || correctAnswer === 'Select...')) {
+                // Handle special case where "none" and empty string should be equivalent
+        if ((userAnswer === 'none') &&
+            (correctAnswer === '' || correctAnswer === 'none' || correctAnswer === 'Select...')) {
             return true;
         }
         
@@ -257,7 +257,7 @@ class MorphologyAnalyzer {
                 continue;
             }
 
-            // Ensure tokens are non-empty strings ("(none)" is allowed)
+            // Ensure tokens are non-empty strings ("none" is allowed)
             [...deletes, ...adds].forEach(tok => {
                 if (typeof tok !== 'string' || tok.length === 0) {
                     console.warn(`WARNING: Paradigm ${paradigmId} contains an empty transformation token.`);
@@ -484,15 +484,89 @@ function setupDropdownEventListeners() {
         document.getElementById('addpluob')
     ];
     
-    // Add change event listeners to all dropdowns - but don't update colors in real-time
+    // Add change event listeners to all dropdowns with validation
     [...deleteSelects, ...addSelects].forEach((select, index) => {
         if (select) {
             select.addEventListener('change', () => {
-                // Don't update colors in real-time - only after submit
-                // updateDropdownColor(select, index);
+                // Validate to prevent redundant operations
+                validateDropdownSelections();
             });
         }
     });
+}
+
+// Validate dropdown selections to prevent redundant operations
+function validateDropdownSelections() {
+    const deleteSelects = [
+        document.getElementById('delsingdr'),
+        document.getElementById('delsingob'),
+        document.getElementById('delpludr'),
+        document.getElementById('delpluob')
+    ];
+    
+    const addSelects = [
+        document.getElementById('addsingdr'),
+        document.getElementById('addsingob'),
+        document.getElementById('addpludr'),
+        document.getElementById('addpluob')
+    ];
+    
+    // Check each pair for redundant operations
+    for (let i = 0; i < 4; i++) {
+        const deleteSelect = deleteSelects[i];
+        const addSelect = addSelects[i];
+        
+        if (deleteSelect && addSelect) {
+            const deleteValue = deleteSelect.value;
+            const addValue = addSelect.value;
+            
+            // If both have values and they're the same (redundant operation)
+            if (deleteValue && addValue && deleteValue === addValue && deleteValue !== 'none') {
+                // Show warning and reset the add selection
+                showRedundantOperationWarning(deleteValue);
+                addSelect.value = '';
+                addSelect.classList.add('incorrect');
+                addSelect.style.backgroundColor = '#ffebee';
+                addSelect.style.borderColor = '#f44336';
+            } else {
+                // Remove warning styling if not redundant
+                addSelect.classList.remove('incorrect');
+                addSelect.style.backgroundColor = '';
+                addSelect.style.borderColor = '';
+            }
+        }
+    }
+}
+
+// Show warning for redundant operations
+function showRedundantOperationWarning(suffix) {
+    // Create or update warning message
+    let warningDiv = document.getElementById('redundantWarning');
+    if (!warningDiv) {
+        warningDiv = document.createElement('div');
+        warningDiv.id = 'redundantWarning';
+        warningDiv.className = 'feedback-container error';
+        warningDiv.style.marginTop = '10px';
+        warningDiv.style.fontSize = '0.9rem';
+        
+        // Insert after the add-delete table
+        const addDeleteSection = document.getElementById('addDeleteSection');
+        if (addDeleteSection) {
+            addDeleteSection.appendChild(warningDiv);
+        }
+    }
+    
+    warningDiv.innerHTML = `
+        <i class="fas fa-exclamation-triangle"></i>
+        <strong>Warning:</strong> Deleting and adding the same suffix "${suffix}" is redundant. 
+        Use "none" if no change is needed, or select different suffixes for meaningful transformations.
+    `;
+    warningDiv.style.display = 'block';
+    
+    // Hide warning after 5 seconds
+    setTimeout(() => {
+        warningDiv.style.display = 'none';
+    }, 5000);
 }
 
 // Update individual dropdown color based on current selection
@@ -559,6 +633,12 @@ function handleSubmit() {
         return;
     }
 
+    // Check for redundant operations before submission
+    if (hasRedundantOperations(userAnswers)) {
+        showFeedback('❌ You have redundant operations (delete and add the same suffix). Please fix these before submitting.', 'error');
+        return;
+    }
+
     analyzer.userAnswers = userAnswers;
     const results = analyzer.checkAnswers(userAnswers);
     
@@ -582,6 +662,20 @@ function handleSubmit() {
     if (checkHeader) {
     checkHeader.innerHTML = '<b>Results</b>';
     }
+}
+
+// Check if user answers contain redundant operations
+function hasRedundantOperations(userAnswers) {
+    for (let i = 0; i < userAnswers.length; i += 2) {
+        const deleteValue = userAnswers[i];
+        const addValue = userAnswers[i + 1];
+        
+        // If both have values and they're the same (redundant operation)
+        if (deleteValue && addValue && deleteValue === addValue && deleteValue !== 'none') {
+            return true;
+        }
+    }
+    return false;
 }
 
 // Update check results in the table
@@ -715,8 +809,8 @@ function showCorrectAnswers() {
         const addIndex = index * 2 + 1;
         answerHTML += `
             <tr>
-                <td>${analyzer.correctAnswers[deleteIndex] || '(none)'}</td>
-                <td>${analyzer.correctAnswers[addIndex] || '(none)'}</td>
+                <td>${analyzer.correctAnswers[deleteIndex] || 'none'}</td>
+                <td>${analyzer.correctAnswers[addIndex] || 'none'}</td>
                 <td>${cat.number}</td>
                 <td>${cat.case}</td>
             </tr>
