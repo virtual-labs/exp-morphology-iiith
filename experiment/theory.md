@@ -57,6 +57,32 @@ The Add-Delete table is a systematic approach to morphological analysis that hel
 2. **What to Add**: Which suffix or affix needs to be added
 3. **Result**: The final word form with its grammatical features
 
+
+**Delete "none":**
+- When the root word doesn't have any suffix to remove
+- When the word form is identical to the root
+- Example: घर (ghar - "house") → घर (ghar - "house")
+
+**Add "none":**
+- When no suffix needs to be added to create the target form
+- When the root word already has the desired form
+- Example: पानी (paanii - "water") → पानी (paanii - "water")
+
+##### **Why "None" is Important:**
+
+1. **Avoids Redundancy**: Prevents meaningless "delete X and add X" operations
+2. **Logical Consistency**: Represents genuine "no change" scenarios
+3. **Linguistic Accuracy**: Reflects real morphological processes
+4. **Computational Efficiency**: Eliminates unnecessary transformations
+
+##### **Examples of "None" Usage:**
+
+| Root Word | Target Form | Delete | Add | Explanation |
+|-----------|-------------|---------|-----|-------------|
+| घर (ghar) | घर (ghar) | none | none | No change needed |
+| पानी (paanii) | पानी (paanii) | none | none | Invariant word |
+| बच्चा (bachchaa) | बच्चा (bachchaa) | none | none | Root form preserved |
+
 #### Table Structure
 
 | Delete | Add | Number | Case | Result |
@@ -170,6 +196,16 @@ Words in the same paradigm class will have:
 - **Features**: Masculine, Plural, Oblique case
 - **Paradigm Class**: Masculine nouns ending in -आ
 
+**Another Example**: घर (ghar - "house")
+
+**Analysis**:
+- **Root**: घर (ghar - "house")
+- **Delete**: none (no suffix to remove)
+- **Add**: none (no suffix to add)
+- **Features**: Masculine, Singular, Direct case
+- **Paradigm Class**: Masculine nouns ending in consonants
+- **Explanation**: This word doesn't change form, so both delete and add are "none"
+
 ---
 
 ### 7. Computational Applications
@@ -206,5 +242,11 @@ Morphological analysis in Hindi requires understanding of:
 - **किताब (kitaab)** is also **feminine** 
 - Gender classification follows Hindi linguistic rules, not English translations
 - Words ending in -आ are typically masculine, while words ending in -त/क are typically feminine
+
+- **"None"** represents **no morphological change** needed
+- Use **Delete "none"** when nothing needs to be removed
+- Use **Add "none"** when no suffix needs to be added
+- **Avoid redundant operations** like delete "ा" and add "ा"
+- **"None"** ensures logical consistency and linguistic accuracy
 
 This theoretical foundation provides the basis for practical morphological analysis using the interactive simulation, where students can apply these concepts to real Hindi words and develop computational thinking skills for linguistic analysis.
