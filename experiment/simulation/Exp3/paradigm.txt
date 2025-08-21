@@ -1,30 +1,30 @@
-1 लड़का none none none none none े े ों
-2 लड़की none none none none none none ियाँ ियों
-3 आदमी none none none ी none none none ियों
-4 औरत none none none none none none ें ों
-5 बच्चा none none none none none े े ों
-6 पुस्तक none none none none none none ें ों
-7 किताब none none none none none none ें ों
-8 घर none none none none none none none ों
-9 गाड़ी none none none none none none ियाँ ियों
-10 पेड़ none none none none none none none ों
-11 फूल none none none none none none none ों
-12 पानी none none none none none none none none
-13 दूध none none none none none none none none
-14 चाय none none none none none none none none
-15 खाना none none none none none े े ों
-16 मकान none none none none none none none ों
-17 कमरा none none none none none े े ों
-18 दरवाजा none none none none none े े ों
-19 खिड़की none none none none none none ियाँ ियों
-20 मेज none none none none none none ें ों
-21 कुर्सी none none none none none none ियाँ ियों
-22 बिस्तर none none none none none none none ों
-23 तकिया none none none none none े े ों
-24 चादर none none none none none none ें ों
-25 कपड़ा none none none none none े े ों
-26 बगीचा none none none none none े े ों
-27 स्कूल none none none none none none none ों
-28 अस्पताल none none none none none none none ों
-29 दुकान none none none none none none ें ों
-30 बाजार none none none none none none none ों 
+1 लड़का लड़का लड़का लड़के लड़कों
+2 लड़की लड़की लड़की लड़कियाँ लड़कियों
+3 आदमी आदमी आदमी आदमी आदमियों
+4 औरत औरत औरत औरतें औरतों
+5 बच्चा बच्चा बच्चा बच्चे बच्चों
+6 पुस्तक पुस्तक पुस्तक पुस्तकें पुस्तकों
+7 किताब किताब किताब किताबें किताबों
+8 घर घर घर घर घरों
+9 गाड़ी गाड़ी गाड़ी गाड़ियाँ गाड़ियों
+10 पेड़ पेड़ पेड़ पेड़ पेड़ों
+11 फूल फूल फूल फूल फूलों
+12 पानी पानी पानी पानी पानियों
+13 दूध दूध दूध दूध दूध
+14 चाय चाय चाय चायें चायों
+15 खाना खाना खाना खाना खानों
+16 मकान मकान मकान मकान मकानों
+17 कमरा कमरा कमरा कमरा कमरों
+18 दरवाजा दरवाजा दरवाजा दरवाजा दरवाजों
+19 खिड़की खिड़की खिड़की खिड़कियाँ खिड़कियों
+20 मेज मेज मेज मेजें मेजों
+21 कुर्सी कुर्सी कुर्सी कुर्सियाँ कुर्सियों
+22 बिस्तर बिस्तर बिस्तर बिस्तर बिस्तरों
+23 तकिया तकिया तकिया तकियाँ तकियों
+24 चादर चादर चादर चादरें चादरों
+25 कपड़ा कपड़ा कपड़ा कपड़ा कपड़ों
+26 बगीचा बगीचा बगीचा बगीचा बगीचों
+27 स्कूल स्कूल स्कूल स्कूल स्कूलों
+28 अस्पताल अस्पताल अस्पताल अस्पताल अस्पतालों
+29 दुकान दुकान दुकान दुकानें दुकानों
+30 बाजार बाजार बाजार बाजार बाजारों 

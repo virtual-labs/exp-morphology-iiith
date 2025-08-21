@@ -37,7 +37,10 @@ class MorphologyAnalyzer {
             }
             const optionsText = await optionsResponse.text();
             console.log('Options text loaded, first 200 chars:', optionsText.substring(0, 200));
+            console.log('Options text total length:', optionsText.length);
             this.parseOptions(optionsText);
+            console.log('After parseOptions - rootWords size:', this.rootWords.size);
+            console.log('Root words map:', Array.from(this.rootWords.entries()));
 
             // Load paradigm data
             const paradigmResponse = await fetch('Exp3/paradigm.txt');
@@ -46,7 +49,10 @@ class MorphologyAnalyzer {
             }
             const paradigmText = await paradigmResponse.text();
             console.log('Paradigm text loaded, first 200 chars:', paradigmText.substring(0, 200));
+            console.log('Paradigm text total length:', paradigmText.length);
             this.parseParadigm(paradigmText);
+            console.log('After parseParadigm - paradigmData size:', this.paradigmData.size);
+            console.log('Paradigm data map:', Array.from(this.paradigmData.entries()));
 
             // Load answer options
             const answersResponse = await fetch('Exp3/answers_opt.txt');
@@ -55,13 +61,14 @@ class MorphologyAnalyzer {
             }
             const answersText = await answersResponse.text();
             console.log('Answers text loaded, first 200 chars:', answersText.substring(0, 200));
+            console.log('Answers text total length:', answersText.length);
             this.parseAnswerOptions(answersText);
 
             this.isInitialized = true;
             console.log('Data loaded successfully');
-            console.log('Root words:', Array.from(this.rootWords.entries()));
-            console.log('Paradigm data:', Array.from(this.paradigmData.entries()));
-            console.log('Answer options:', this.answerOptions);
+            console.log('Final root words:', Array.from(this.rootWords.entries()));
+            console.log('Final paradigm data:', Array.from(this.paradigmData.entries()));
+            console.log('Final answer options:', this.answerOptions);
             return true;
         } catch (error) {
             console.error('Error loading data:', error);
@@ -73,42 +80,56 @@ class MorphologyAnalyzer {
     parseOptions(text) {
         const lines = text.trim().split('\n');
         console.log('Parsing options:', lines);
+        console.log('Total lines to parse:', lines.length);
         
-        lines.forEach(line => {
+        lines.forEach((line, index) => {
             const parts = line.trim().split(/\s+/);
+            console.log(`Line ${index + 1}: "${line.trim()}" -> parts: [${parts.join(', ')}]`);
+            
             if (parts.length >= 2) {
                 const paradigmId = parts[0];
                 const word = parts[1];
                 this.rootWords.set(word, paradigmId);
                 console.log(`Added root word: ${word} -> paradigm ${paradigmId}`);
+            } else {
+                console.warn(`Line ${index + 1} has insufficient parts (${parts.length}):`, parts);
             }
         });
+        
+        console.log('parseOptions completed. Total root words:', this.rootWords.size);
     }
 
     // Parse paradigm.txt file
     parseParadigm(text) {
         const lines = text.trim().split('\n');
         console.log('Parsing paradigm lines:', lines.length);
+        console.log('First few lines:', lines.slice(0, 3));
         
         lines.forEach((line, lineIndex) => {
             const parts = line.trim().split(/\s+/);
-            console.log(`Line ${lineIndex + 1}: "${line.trim()}" -> ${parts.length} parts`);
+            console.log(`Line ${lineIndex + 1}: "${line.trim()}" -> ${parts.length} parts: [${parts.join(', ')}]`);
             
-            if (parts.length >= 10) {
+            if (parts.length >= 6) {
                 const paradigmId = parts[0];
                 const rootWord = parts[1];
-                const tokens = parts.slice(2, 10).map(t => t.trim());
-                const deletes = tokens.slice(0, 4);
-                const adds = tokens.slice(4, 8);
+                const wordForms = parts.slice(2, 6).map(t => t.trim());
+                
+                console.log(`Processing line ${lineIndex + 1}: ID=${paradigmId}, Root=${rootWord}, Forms=[${wordForms.join(', ')}]`);
+                console.log(`Word forms array details: length=${wordForms.length}, types=[${wordForms.map(w => typeof w).join(', ')}]`);
+                console.log(`Individual word forms:`, wordForms.map((w, i) => `[${i}]: "${w}" (${typeof w})`));
+                
                 this.paradigmData.set(paradigmId, {
                     root: rootWord,
-                    transformations: { deletes, adds }
+                    wordForms: wordForms
                 });
-                console.log(`Added paradigm ${paradigmId}: root="${rootWord}", deletes=`, deletes, 'adds=', adds);
+                console.log(`Added paradigm ${paradigmId}: root="${rootWord}", wordForms=`, wordForms);
             } else {
                 console.warn(`Line ${lineIndex + 1} has insufficient parts (${parts.length}):`, parts);
             }
         });
+        
+        console.log('parseParadigm completed. Total paradigms:', this.paradigmData.size);
+        console.log('Sample paradigm data:', Array.from(this.paradigmData.entries()).slice(0, 2));
     }
 
     // Parse answers_opt.txt file
@@ -130,22 +151,38 @@ class MorphologyAnalyzer {
     getParadigm(rootWord) {
         const paradigmId = this.rootWords.get(rootWord);
         console.log(`Getting paradigm for ${rootWord}: paradigm ID ${paradigmId}`);
+        console.log('Available root words:', Array.from(this.rootWords.keys()));
+        console.log('Available paradigm IDs:', Array.from(this.paradigmData.keys()));
         
         if (paradigmId) {
             const paradigm = this.paradigmData.get(paradigmId);
             console.log('Found paradigm:', paradigm);
+            if (!paradigm) {
+                console.error(`Paradigm ID ${paradigmId} not found in paradigmData`);
+                console.log('Available paradigms:', Array.from(this.paradigmData.entries()));
+            }
             return paradigm;
+        } else {
+            console.error(`Root word ${rootWord} not found in rootWords`);
+            console.log('Available root words:', Array.from(this.rootWords.keys()));
         }
         return null;
     }
 
     // Generate word forms table
     generateWordFormsTable(rootWord) {
+        console.log(`generateWordFormsTable called with rootWord: ${rootWord}`);
         const paradigm = this.getParadigm(rootWord);
-        if (!paradigm) return null;
+        console.log('Retrieved paradigm:', paradigm);
+        
+        if (!paradigm) {
+            console.error('No paradigm found for rootWord:', rootWord);
+            return null;
+        }
 
-        const deletes = paradigm.transformations.deletes;
-        const adds = paradigm.transformations.adds;
+        const wordForms = paradigm.wordForms;
+        console.log('Word forms from paradigm:', wordForms);
+        console.log('Word forms length:', wordForms.length);
 
         const forms = [
             { number: 'Singular', case: 'Direct', index: 0 },
@@ -154,39 +191,59 @@ class MorphologyAnalyzer {
             { number: 'Plural', case: 'Oblique', index: 3 }
         ];
 
-        return forms.map(form => ({
-            word: this.applyDeleteAdd(rootWord, deletes[form.index], adds[form.index]),
-            root: rootWord,
-            number: form.number,
-            case: form.case,
-            transformation: { del: deletes[form.index], add: adds[form.index] }
-        }));
+        const result = forms.map(form => {
+            const word = wordForms[form.index];
+            console.log(`Form ${form.index}: ${form.number} ${form.case} -> word: "${word}" (type: ${typeof word}, length: ${word ? word.length : 'undefined'})`);
+            
+            // Check if word is undefined, null, or empty
+            if (word === undefined) {
+                console.error(`Word at index ${form.index} is undefined!`);
+                console.error(`wordForms array:`, wordForms);
+                console.error(`wordForms length:`, wordForms.length);
+            } else if (word === null) {
+                console.error(`Word at index ${form.index} is null!`);
+            } else if (word === '') {
+                console.error(`Word at index ${form.index} is empty string!`);
+            }
+            
+            return {
+                word: word,
+                root: rootWord,
+                number: form.number,
+                case: form.case,
+                transformation: null // No delete/add for this new format
+            };
+        });
+        
+        console.log('Generated result:', result);
+        return result;
     }
 
     // Apply delete + add to form the target word
     applyDeleteAdd(root, delSuffix, addSuffix) {
         console.log(`Generating word form: root="${root}", delete="${delSuffix}", add="${addSuffix}"`);
-        const NONE = 'none';
-        const shouldDelete = delSuffix && delSuffix !== NONE;
-        const shouldAdd = addSuffix && addSuffix !== NONE;
-
-        let base = root;
-        if (shouldDelete) {
+        
+        let result = root;
+        
+        // Handle delete operation
+        if (delSuffix && delSuffix !== 'none') {
             if (root.endsWith(delSuffix)) {
-                base = root.slice(0, root.length - delSuffix.length);
-                console.log(`Deleted suffix "${delSuffix}": "${root}" -> "${base}"`);
+                result = root.slice(0, root.length - delSuffix.length);
+                console.log(`Deleted suffix "${delSuffix}": "${root}" -> "${result}"`);
             } else {
-                console.log(`Delete suffix "${delSuffix}" not found at end of "${root}". Leaving root unchanged.`);
+                console.log(`Delete suffix "${delSuffix}" not found at end of "${root}". Keeping root unchanged.`);
+                result = root;
             }
         }
-
-        if (shouldAdd) {
-            const result = base + addSuffix;
-            console.log(`Added suffix "${addSuffix}": "${base}" -> "${result}"`);
-            return result;
+        
+        // Handle add operation
+        if (addSuffix && addSuffix !== 'none') {
+            result = result + addSuffix;
+            console.log(`Added suffix "${addSuffix}": "${result}" -> "${result}"`);
         }
-
-        return base;
+        
+        console.log(`Final result: "${root}" -> "${result}"`);
+        return result;
     }
 
     // Get correct answers for current paradigm
@@ -194,17 +251,52 @@ class MorphologyAnalyzer {
         const paradigm = this.getParadigm(rootWord);
         if (!paradigm) return [];
 
-        const { deletes, adds } = paradigm.transformations;
-        return [
-            deletes[0], // delete singular direct
-            adds[0],    // add singular direct
-            deletes[1], // delete singular oblique
-            adds[1],    // add singular oblique
-            deletes[2], // delete plural direct
-            adds[2],    // add plural direct
-            deletes[3], // delete plural oblique
-            adds[3]     // add plural oblique
-        ];
+        const { wordForms } = paradigm;
+        const answers = [];
+        
+        // For each word form, calculate what needs to be deleted and added
+        wordForms.forEach((targetForm, index) => {
+            const { deleteOp, addOp } = this.calculateTransformation(rootWord, targetForm);
+            answers.push(deleteOp, addOp);
+        });
+        
+        return answers;
+    }
+    
+    // Calculate what needs to be deleted and added to transform root into target
+    calculateTransformation(root, target) {
+        console.log(`Calculating transformation: "${root}" -> "${target}"`);
+        
+        // If root and target are the same, no transformation needed
+        if (root === target) {
+            return { deleteOp: 'none', addOp: 'none' };
+        }
+        
+        // Find the longest common suffix between root and target
+        let commonSuffix = '';
+        let rootIndex = root.length - 1;
+        let targetIndex = target.length - 1;
+        
+        while (rootIndex >= 0 && targetIndex >= 0 && root[rootIndex] === target[targetIndex]) {
+            commonSuffix = root[rootIndex] + commonSuffix;
+            rootIndex--;
+            targetIndex--;
+        }
+        
+        // Calculate what to delete from root
+        let deleteOp = 'none';
+        if (rootIndex < root.length - 1) {
+            deleteOp = root.substring(rootIndex + 1);
+        }
+        
+        // Calculate what to add after the common part
+        let addOp = 'none';
+        if (targetIndex >= 0) {
+            addOp = target.substring(0, targetIndex + 1);
+        }
+        
+        console.log(`Transformation: delete="${deleteOp}", add="${addOp}"`);
+        return { deleteOp, addOp };
     }
 
     // Check user answers
@@ -248,24 +340,24 @@ class MorphologyAnalyzer {
     validateParadigmData() {
         console.log('Validating paradigm data...');
         for (const [paradigmId, paradigm] of this.paradigmData.entries()) {
-            const { deletes, adds } = paradigm.transformations;
+            const wordForms = paradigm.wordForms;
             const root = paradigm.root;
 
             // Basic sanity checks
-            if (!Array.isArray(deletes) || !Array.isArray(adds) || deletes.length !== 4 || adds.length !== 4) {
-                console.warn(`WARNING: Paradigm ${paradigmId} has malformed transformations.`);
+            if (!Array.isArray(wordForms) || wordForms.length !== 4) {
+                console.warn(`WARNING: Paradigm ${paradigmId} has malformed word forms.`);
                 continue;
             }
 
             // Ensure tokens are non-empty strings ("none" is allowed)
-            [...deletes, ...adds].forEach(tok => {
-                if (typeof tok !== 'string' || tok.length === 0) {
-                    console.warn(`WARNING: Paradigm ${paradigmId} contains an empty transformation token.`);
+            wordForms.forEach(form => {
+                if (typeof form !== 'string' || form.length === 0) {
+                    console.warn(`WARNING: Paradigm ${paradigmId} contains an empty word form.`);
                 }
             });
 
             // Log useful info
-            console.log(`Paradigm ${paradigmId}: root="${root}", deletes=${JSON.stringify(deletes)}, adds=${JSON.stringify(adds)}`);
+            console.log(`Paradigm ${paradigmId}: root="${root}", wordForms=${JSON.stringify(wordForms)}`);
         }
         console.log('Paradigm data validation complete.');
     }
@@ -284,73 +376,50 @@ const feedback = document.getElementById('feedback');
 const correctAnswer = document.getElementById('correctAnswer');
 const checkHeader = document.getElementById('checkHeader');
 
-// Initialize the analyzer
-const analyzer = new MorphologyAnalyzer();
-
-// Initialize the application
-async function initializeApp() {
-    console.log('Initializing app...');
+// Initialize the application when DOM is loaded
+function initializeApp() {
+    console.log('Initializing application...');
     
-    try {
-        const loaded = await analyzer.loadData();
-        if (!loaded) {
-            showFeedback('Error loading data. Please refresh the page.', 'error');
-            console.error('Failed to load data');
-            return;
+    // Initialize the morphology analyzer
+    window.morphologyAnalyzer = new MorphologyAnalyzer();
+    
+    // Load data
+    morphologyAnalyzer.loadData().then(success => {
+        if (success) {
+            console.log('Application initialized successfully');
+            // Populate the root word dropdown
+            populateRootWordsDropdown();
+            // Setup event listeners
+            setupEventListeners();
+            // Setup instructions panel
+            setupInstructionsPanel();
+        } else {
+            console.error('Failed to initialize application');
+            showFeedback('Failed to load data. Please refresh the page.', 'error');
         }
-
-        // Verify data was loaded
-        if (analyzer.rootWords.size === 0) {
-            console.error('No root words loaded!');
-            showFeedback('No data loaded. Please check the data files.', 'error');
-            return;
-        }
-
-        populateRootWordsDropdown();
-        setupEventListeners();
-        setupInstructionsPanel();
-        
-        console.log('App initialized successfully');
-        console.log('Total root words available:', analyzer.rootWords.size);
-    } catch (error) {
+    }).catch(error => {
         console.error('Error during initialization:', error);
-        showFeedback('Error initializing application: ' + error.message, 'error');
-    }
+        showFeedback('Error initializing application. Please refresh the page.', 'error');
+    });
 }
 
 // Populate root words dropdown
 function populateRootWordsDropdown() {
-    const rootWords = analyzer.getRootWords();
+    const rootWords = morphologyAnalyzer.getRootWords();
     console.log('Populating dropdown with root words:', rootWords);
     
     // Clear existing options
-    rootSelection.innerHTML = '';
+    rootSelection.innerHTML = '<option value="">Select a root word...</option>';
     
-    // Add default option
-    const defaultOption = document.createElement('option');
-    defaultOption.value = '';
-    defaultOption.textContent = 'Select a root word...';
-    rootSelection.appendChild(defaultOption);
-    
-    // Add root word options
-    rootWords.forEach((word, index) => {
+    // Add root words
+    rootWords.forEach(word => {
         const option = document.createElement('option');
         option.value = word;
         option.textContent = word;
-        // Add data attribute for debugging
-        option.setAttribute('data-index', index);
         rootSelection.appendChild(option);
-        console.log(`Added option ${index + 1}: "${word}" (length: ${word.length})`);
     });
     
     console.log('Dropdown populated with', rootWords.length, 'words');
-    console.log('Total options in dropdown:', rootSelection.options.length);
-    
-    // Verify options are visible
-    if (rootSelection.options.length <= 1) {
-        console.error('Dropdown has no word options!');
-        showFeedback('No words available in dropdown. Please check data files.', 'error');
-    }
 }
 
 // Handle root word selection
@@ -364,12 +433,21 @@ function handleRootSelection() {
         return;
     }
 
-    analyzer.currentRoot = selectedRoot;
-    analyzer.currentParadigm = analyzer.getParadigm(selectedRoot);
-    analyzer.correctAnswers = analyzer.getCorrectAnswers(selectedRoot);
+    console.log('Current root words map:', Array.from(morphologyAnalyzer.rootWords.entries()));
+    console.log('Current paradigm data map:', Array.from(morphologyAnalyzer.paradigmData.entries()));
     
-    console.log('Current paradigm:', analyzer.currentParadigm);
-    console.log('Correct answers:', analyzer.correctAnswers);
+    morphologyAnalyzer.currentRoot = selectedRoot;
+    morphologyAnalyzer.currentParadigm = morphologyAnalyzer.getParadigm(selectedRoot);
+    morphologyAnalyzer.correctAnswers = morphologyAnalyzer.getCorrectAnswers(selectedRoot);
+    
+    console.log('Current paradigm:', morphologyAnalyzer.currentParadigm);
+    console.log('Correct answers:', morphologyAnalyzer.correctAnswers);
+    
+    if (!morphologyAnalyzer.currentParadigm) {
+        console.error('No paradigm found for word:', selectedRoot);
+        showFeedback('Error: No paradigm data found for this word.', 'error');
+        return;
+    }
     
     showParadigmTable(selectedRoot);
     showAddDeleteTable();
@@ -379,8 +457,19 @@ function handleRootSelection() {
 
 // Show paradigm table
 function showParadigmTable(rootWord) {
-    const wordForms = analyzer.generateWordFormsTable(rootWord);
-    if (!wordForms) return null;
+    console.log('showParadigmTable called for:', rootWord);
+    console.log('paradigmTable element:', paradigmTable);
+    console.log('paradigmSection element:', paradigmSection);
+    
+    const wordForms = morphologyAnalyzer.generateWordFormsTable(rootWord);
+    console.log('Generated word forms:', wordForms);
+    
+    if (!wordForms) {
+        console.error('No word forms generated for:', rootWord);
+        paradigmTable.innerHTML = '<p style="color: red;">Error: No word forms generated</p>';
+        paradigmSection.style.display = 'block';
+        return null;
+    }
 
     console.log('Generating paradigm table for:', rootWord);
     console.log('Word forms:', wordForms);
@@ -411,8 +500,20 @@ function showParadigmTable(rootWord) {
     });
 
     tableHTML += '</tbody></table>';
+    
+    console.log('Setting paradigm table HTML:', tableHTML);
+    console.log('paradigmTable.innerHTML before:', paradigmTable.innerHTML);
+    
     paradigmTable.innerHTML = tableHTML;
+    
+    console.log('paradigmTable.innerHTML after:', paradigmTable.innerHTML);
+    
+    // Ensure the paradigm section is visible
     paradigmSection.style.display = 'block';
+    console.log('Paradigm section display set to:', paradigmSection.style.display);
+    console.log('Paradigm section visibility:', paradigmSection.offsetHeight > 0 ? 'visible' : 'hidden');
+    console.log('Paradigm section offsetHeight:', paradigmSection.offsetHeight);
+    console.log('Paradigm section style:', paradigmSection.style);
 }
 
 // Show add-delete table
@@ -424,7 +525,7 @@ function showAddDeleteTable() {
         { number: 'plu', case: 'ob', label: 'Plural Oblique', fullNumber: 'Plural', fullCase: 'Oblique' }
     ];
 
-    console.log('Creating add-delete table with options:', analyzer.answerOptions);
+    console.log('Creating add-delete table with options:', morphologyAnalyzer.answerOptions);
 
     // Set the header text to "Results"
     if (checkHeader) {
@@ -438,13 +539,13 @@ function showAddDeleteTable() {
                 <td>
                     <select id="del${cat.number}${cat.case}" class="select-box">
                         <option value="">Select...</option>
-                        ${analyzer.answerOptions.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+                        ${morphologyAnalyzer.answerOptions.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
                     </select>
                 </td>
                 <td>
                     <select id="add${cat.number}${cat.case}" class="select-box">
                         <option value="">Select...</option>
-                        ${analyzer.answerOptions.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+                        ${morphologyAnalyzer.answerOptions.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
                     </select>
                 </td>
                 <td>${cat.fullNumber}</td>
@@ -489,92 +590,21 @@ function setupDropdownEventListeners() {
         if (select) {
             select.addEventListener('change', () => {
                 // Validate to prevent redundant operations
-                validateDropdownSelections();
             });
         }
     });
 }
 
 // Validate dropdown selections to prevent redundant operations
-function validateDropdownSelections() {
-    const deleteSelects = [
-        document.getElementById('delsingdr'),
-        document.getElementById('delsingob'),
-        document.getElementById('delpludr'),
-        document.getElementById('delpluob')
-    ];
-    
-    const addSelects = [
-        document.getElementById('addsingdr'),
-        document.getElementById('addsingob'),
-        document.getElementById('addpludr'),
-        document.getElementById('addpluob')
-    ];
-    
-    // Check each pair for redundant operations
-    for (let i = 0; i < 4; i++) {
-        const deleteSelect = deleteSelects[i];
-        const addSelect = addSelects[i];
-        
-        if (deleteSelect && addSelect) {
-            const deleteValue = deleteSelect.value;
-            const addValue = addSelect.value;
-            
-            // If both have values and they're the same (redundant operation)
-            if (deleteValue && addValue && deleteValue === addValue && deleteValue !== 'none') {
-                // Show warning and reset the add selection
-                showRedundantOperationWarning(deleteValue);
-                addSelect.value = '';
-                addSelect.classList.add('incorrect');
-                addSelect.style.backgroundColor = '#ffebee';
-                addSelect.style.borderColor = '#f44336';
-            } else {
-                // Remove warning styling if not redundant
-                addSelect.classList.remove('incorrect');
-                addSelect.style.backgroundColor = '';
-                addSelect.style.borderColor = '';
-            }
-        }
-    }
-}
 
 // Show warning for redundant operations
-function showRedundantOperationWarning(suffix) {
-    // Create or update warning message
-    let warningDiv = document.getElementById('redundantWarning');
-    if (!warningDiv) {
-        warningDiv = document.createElement('div');
-        warningDiv.id = 'redundantWarning';
-        warningDiv.className = 'feedback-container error';
-        warningDiv.style.marginTop = '10px';
-        warningDiv.style.fontSize = '0.9rem';
-        
-        // Insert after the add-delete table
-        const addDeleteSection = document.getElementById('addDeleteSection');
-        if (addDeleteSection) {
-            addDeleteSection.appendChild(warningDiv);
-        }
-    }
-    
-    warningDiv.innerHTML = `
-        <i class="fas fa-exclamation-triangle"></i>
-        <strong>Warning:</strong> Deleting and adding the same suffix "${suffix}" is redundant. 
-        Use "none" if no change is needed, or select different suffixes for meaningful transformations.
-    `;
-    warningDiv.style.display = 'block';
-    
-    // Hide warning after 5 seconds
-    setTimeout(() => {
-        warningDiv.style.display = 'none';
-    }, 5000);
-}
 
 // Update individual dropdown color based on current selection
 function updateDropdownColor(select, index) {
-    if (!analyzer.correctAnswers.length) return;
+    if (!morphologyAnalyzer.correctAnswers.length) return;
     
     const userValue = select.value;
-    const correctValue = analyzer.correctAnswers[index];
+    const correctValue = morphologyAnalyzer.correctAnswers[index];
     const isCorrect = userValue === correctValue;
     
     // Remove existing classes
@@ -606,7 +636,7 @@ function updateDropdownColor(select, index) {
 function handleSubmit() {
     console.log('Submit button clicked');
     
-    if (!analyzer.currentRoot) {
+    if (!morphologyAnalyzer.currentRoot) {
         console.log('No root selected');
         return;
     }
@@ -633,14 +663,8 @@ function handleSubmit() {
         return;
     }
 
-    // Check for redundant operations before submission
-    if (hasRedundantOperations(userAnswers)) {
-        showFeedback('❌ You have redundant operations (delete and add the same suffix). Please fix these before submitting.', 'error');
-        return;
-    }
-
-    analyzer.userAnswers = userAnswers;
-    const results = analyzer.checkAnswers(userAnswers);
+    morphologyAnalyzer.userAnswers = userAnswers;
+    const results = morphologyAnalyzer.checkAnswers(userAnswers);
     
     console.log('Check results:', results);
     
@@ -660,23 +684,11 @@ function handleSubmit() {
     
     // Update header to show "Results" clearly
     if (checkHeader) {
-    checkHeader.innerHTML = '<b>Results</b>';
+        checkHeader.innerHTML = '<b>Results</b>';
     }
 }
 
 // Check if user answers contain redundant operations
-function hasRedundantOperations(userAnswers) {
-    for (let i = 0; i < userAnswers.length; i += 2) {
-        const deleteValue = userAnswers[i];
-        const addValue = userAnswers[i + 1];
-        
-        // If both have values and they're the same (redundant operation)
-        if (deleteValue && addValue && deleteValue === addValue && deleteValue !== 'none') {
-            return true;
-        }
-    }
-    return false;
-}
 
 // Update check results in the table
 function updateCheckResults(results) {
@@ -704,8 +716,8 @@ function updateCheckResults(results) {
         // Update dropdown styles - highlight wrong answers after submit
         if (deleteSelects[i]) {
             const userValue = deleteSelects[i].value;
-            const correctValue = analyzer.correctAnswers[i * 2];
-            const isCorrect = analyzer.isAnswerCorrect(userValue, correctValue);
+            const correctValue = morphologyAnalyzer.correctAnswers[i * 2];
+            const isCorrect = morphologyAnalyzer.isAnswerCorrect(userValue, correctValue);
             
             // Remove existing classes
             deleteSelects[i].classList.remove('correct', 'incorrect');
@@ -733,8 +745,8 @@ function updateCheckResults(results) {
         
         if (addSelects[i]) {
             const userValue = addSelects[i].value;
-            const correctValue = analyzer.correctAnswers[i * 2 + 1];
-            const isCorrect = analyzer.isAnswerCorrect(userValue, correctValue);
+            const correctValue = morphologyAnalyzer.correctAnswers[i * 2 + 1];
+            const isCorrect = morphologyAnalyzer.isAnswerCorrect(userValue, correctValue);
             
             // Remove existing classes
             addSelects[i].classList.remove('correct', 'incorrect');
@@ -773,18 +785,18 @@ function updateCheckResults(results) {
 
 // Show correct answers
 function showCorrectAnswers() {
-    if (!analyzer.correctAnswers.length) {
+    if (!morphologyAnalyzer.correctAnswers.length) {
         console.log('No correct answers available');
         return;
     }
 
-    console.log('Showing correct answers:', analyzer.correctAnswers);
+    console.log('Showing correct answers:', morphologyAnalyzer.correctAnswers);
 
     // Clear any existing feedback or notifications
     clearFeedback();
 
     let answerHTML = `
-        <h4>Correct Add-Delete Table for "${analyzer.currentRoot}"</h4>
+        <h4>Correct Add-Delete Table for "${morphologyAnalyzer.currentRoot}"</h4>
         <table class="correct-answer-table">
             <thead>
                 <tr>
@@ -809,8 +821,8 @@ function showCorrectAnswers() {
         const addIndex = index * 2 + 1;
         answerHTML += `
             <tr>
-                <td>${analyzer.correctAnswers[deleteIndex] || 'none'}</td>
-                <td>${analyzer.correctAnswers[addIndex] || 'none'}</td>
+                <td>${morphologyAnalyzer.correctAnswers[deleteIndex] || 'none'}</td>
+                <td>${morphologyAnalyzer.correctAnswers[addIndex] || 'none'}</td>
                 <td>${cat.number}</td>
                 <td>${cat.case}</td>
             </tr>
@@ -831,10 +843,10 @@ function resetSimulation() {
     hideAddDeleteSection();
     clearFeedback();
     clearResults();
-    analyzer.currentRoot = null;
-    analyzer.currentParadigm = null;
-    analyzer.correctAnswers = [];
-    analyzer.userAnswers = [];
+    morphologyAnalyzer.currentRoot = null;
+    morphologyAnalyzer.currentParadigm = null;
+    morphologyAnalyzer.correctAnswers = [];
+    morphologyAnalyzer.userAnswers = [];
     submitButton.disabled = true;
     getAnswerButton.style.display = 'none';
     
