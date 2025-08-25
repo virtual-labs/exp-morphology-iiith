@@ -11,11 +11,13 @@ Morphological analysis is a fundamental concept in linguistics and Natural Langu
 #### Types of Morphemes
 
 ##### **Root Morphemes**
+
 - Carry the core meaning of the word
 - Cannot be broken down further without losing meaning
 - Example: बच्चा (bachchaa - "child"), खेल (khel - "play")
 
 ##### **Affix Morphemes**
+
 - Modify the meaning or grammatical function of the root
 - Can be prefixes (before root) or suffixes (after root)
 - Example: -ई (feminine suffix), -ए (plural suffix), ओं (oblique plural suffix)
@@ -29,18 +31,22 @@ Morphological analysis is a fundamental concept in linguistics and Natural Langu
 Hindi words can be analyzed according to several grammatical features:
 
 ##### **Gender (लिंग)**
+
 - **Masculine (पुल्लिंग)**: लड़का (ladkaa - "boy"), घर (ghar - "house"), मकान (makaan - "house"), बाजार (bazaar - "market")
 - **Feminine (स्त्रीलिंग)**: लड़की (ladkii - "girl"), पुस्तक (pustak - "book"), किताब (kitaab - "book"), मेज (mej - "table"), कुर्सी (kursi - "chair"), खिड़की (khidki - "window"), दुकान (dukaan - "shop")
 
 ##### **Number (वचन)**
+
 - **Singular (एकवचन)**: बच्चा (bachchaa - "child")
 - **Plural (बहुवचन)**: बच्चे (bachche - "children")
 
 ##### **Case (कारक)**
+
 - **Direct Case (कर्ता कारक)**: Used when no postposition follows the noun
 - **Oblique Case (कर्म कारक)**: Used when a postposition follows the noun
 
 #### Common Hindi Postpositions
+
 - का/की/के (kaa/kii/ke - "of")
 - को (ko - "to")
 - में (meM - "in")
@@ -53,44 +59,26 @@ Hindi words can be analyzed according to several grammatical features:
 #### Concept and Purpose
 
 The Add-Delete table is a systematic approach to morphological analysis that helps identify:
+
 1. **What to Delete**: Which part of the root word needs to be removed
 2. **What to Add**: Which suffix or affix needs to be added
 3. **Result**: The final word form with its grammatical features
 
+##### **Examples:**
 
-**Delete "none":**
-- When the root word doesn't have any suffix to remove
-- When the word form is identical to the root
-- Example: घर (ghar - "house") → घर (ghar - "house")
-
-**Add "none":**
-- When no suffix needs to be added to create the target form
-- When the root word already has the desired form
-- Example: पानी (paanii - "water") → पानी (paanii - "water")
-
-##### **Why "None" is Important:**
-
-1. **Avoids Redundancy**: Prevents meaningless "delete X and add X" operations
-2. **Logical Consistency**: Represents genuine "no change" scenarios
-3. **Linguistic Accuracy**: Reflects real morphological processes
-4. **Computational Efficiency**: Eliminates unnecessary transformations
-
-##### **Examples of "None" Usage:**
-
-| Root Word | Target Form | Delete | Add | Explanation |
-|-----------|-------------|---------|-----|-------------|
-| घर (ghar) | घर (ghar) | none | none | No change needed |
-| पानी (paanii) | पानी (paanii) | none | none | Invariant word |
-| बच्चा (bachchaa) | बच्चा (bachchaa) | none | none | Root form preserved |
+| Root Word        | Target Form       | Delete | Add | Explanation              |
+| ---------------- | ----------------- | ------ | --- | ------------------------ |
+| बच्चा (bachchaa) | बच्चे (bachche)   | आ      | ए   | Plural formation         |
+| बच्चा (bachchaa) | बच्चों (bachchoM) | आ      | ओं  | Plural oblique formation |
 
 #### Table Structure
 
-| Delete | Add | Number | Case | Result |
-|--------|-----|--------|------|--------|
-| आ | आ | Singular | Direct | बच्चा |
-| आ | ए | Plural | Direct | बच्चे |
-| आ | ए | Singular | Oblique | बच्चे |
-| आ | ओं | Plural | Oblique | बच्चों |
+| Delete | Add | Number   | Case    | Result |
+| ------ | --- | -------- | ------- | ------ |
+| आ      | आ   | Singular | Direct  | बच्चा  |
+| आ      | ए   | Plural   | Direct  | बच्चे  |
+| आ      | ए   | Singular | Oblique | बच्चे  |
+| आ      | ओं  | Plural   | Oblique | बच्चों |
 
 ---
 
@@ -102,10 +90,10 @@ A **linguistic paradigm** is the complete set of morphological variants of a giv
 
 #### Example: बच्चा Paradigm
 
-| Case/Number | Singular | Plural |
-|-------------|----------|--------|
-| Direct | बच्चा (bachchaa) | बच्चे (bachche) |
-| Oblique | बच्चे (bachche) | बच्चों (bachchoM) |
+| Case/Number | Singular         | Plural            |
+| ----------- | ---------------- | ----------------- |
+| Direct      | बच्चा (bachchaa) | बच्चे (bachche)   |
+| Oblique     | बच्चे (bachche)  | बच्चों (bachchoM) |
 
 #### Algorithm for Morphological Transformation
 
@@ -128,6 +116,7 @@ Words that follow similar morphological patterns belong to the same paradigm cla
 #### Example Paradigm Classes
 
 ##### **Class 1: Masculine Nouns ending in -आ**
+
 - बच्चा (bachchaa - "child")
 - लड़का (ladkaa - "boy")
 - मकान (makaan - "house")
@@ -138,6 +127,7 @@ Words that follow similar morphological patterns belong to the same paradigm cla
 - बगीचा (bagichaa - "garden")
 
 ##### **Class 2: Feminine Nouns ending in -ई**
+
 - लड़की (ladkii - "girl")
 - आदमी (aadmii - "person")
 - गाड़ी (gaadii - "vehicle")
@@ -145,6 +135,7 @@ Words that follow similar morphological patterns belong to the same paradigm cla
 - कुर्सी (kursii - "chair")
 
 ##### **Class 3: Feminine Nouns ending in -त/क**
+
 - पुस्तक (pustak - "book")
 - किताब (kitaab - "book")
 - मेज (mej - "table")
@@ -152,6 +143,7 @@ Words that follow similar morphological patterns belong to the same paradigm cla
 - दुकान (dukaan - "shop")
 
 ##### **Class 4: Masculine Nouns ending in consonants**
+
 - घर (ghar - "house")
 - पेड़ (ped - "tree")
 - फूल (phool - "flower")
@@ -161,6 +153,7 @@ Words that follow similar morphological patterns belong to the same paradigm cla
 - बाजार (bazaar - "market")
 
 ##### **Class 5: Invariant Nouns (Neuter)**
+
 - पानी (paanii - "water")
 - दूध (duudh - "milk")
 - चाय (chaay - "tea")
@@ -168,6 +161,7 @@ Words that follow similar morphological patterns belong to the same paradigm cla
 #### Pattern Recognition
 
 Words in the same paradigm class will have:
+
 - Similar deletion patterns
 - Similar addition patterns
 - Consistent grammatical feature encoding
@@ -190,6 +184,7 @@ Words in the same paradigm class will have:
 **Word**: लड़कों (ladkoM - "of boys")
 
 **Analysis**:
+
 - **Root**: लड़का (ladkaa - "boy")
 - **Delete**: आ (aa)
 - **Add**: ओं (oM)
@@ -199,12 +194,11 @@ Words in the same paradigm class will have:
 **Another Example**: घर (ghar - "house")
 
 **Analysis**:
+
 - **Root**: घर (ghar - "house")
-- **Delete**: none (no suffix to remove)
-- **Add**: none (no suffix to add)
 - **Features**: Masculine, Singular, Direct case
 - **Paradigm Class**: Masculine nouns ending in consonants
-- **Explanation**: This word doesn't change form, so both delete and add are "none"
+- **Explanation**: This word doesn't change form in this paradigm.
 
 ---
 
@@ -213,6 +207,7 @@ Words in the same paradigm class will have:
 #### Importance in NLP
 
 Morphological analysis is crucial for:
+
 - **Machine Translation**: Understanding word structure for accurate translation
 - **Information Retrieval**: Finding related word forms in search queries
 - **Text Processing**: Normalizing words to their root forms
@@ -221,6 +216,7 @@ Morphological analysis is crucial for:
 #### Challenges in Hindi
 
 Hindi presents unique challenges due to:
+
 - **Morphological Richness**: Many possible word forms from a single root
 - **Complex Paradigms**: Multiple paradigm classes with different patterns
 - **Sandhi Rules**: Sound changes when morphemes combine
@@ -231,22 +227,18 @@ Hindi presents unique challenges due to:
 ### 8. Summary
 
 Morphological analysis in Hindi requires understanding of:
+
 - **Morpheme Structure**: How words are built from smaller meaningful units
 - **Grammatical Features**: How gender, number, and case affect word forms
 - **Paradigm Classes**: How similar words follow consistent patterns
 - **Add-Delete Methodology**: Systematic approach to morphological transformation
 - **Pattern Recognition**: Identifying consistent morphological behaviors
 
-**Important Note on Gender Classification**: 
+**Important Note on Gender Classification**:
+
 - **पुस्तक (pustak)** is **feminine** in Hindi, not masculine as commonly assumed
-- **किताब (kitaab)** is also **feminine** 
+- **किताब (kitaab)** is also **feminine**
 - Gender classification follows Hindi linguistic rules, not English translations
 - Words ending in -आ are typically masculine, while words ending in -त/क are typically feminine
-
-- **"None"** represents **no morphological change** needed
-- Use **Delete "none"** when nothing needs to be removed
-- Use **Add "none"** when no suffix needs to be added
-- **Avoid redundant operations** like delete "ा" and add "ा"
-- **"None"** ensures logical consistency and linguistic accuracy
 
 This theoretical foundation provides the basis for practical morphological analysis using the interactive simulation, where students can apply these concepts to real Hindi words and develop computational thinking skills for linguistic analysis.
