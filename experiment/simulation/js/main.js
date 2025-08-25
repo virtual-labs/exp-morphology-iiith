@@ -87,10 +87,10 @@ class MorphologyAnalyzer {
             console.log(`Line ${index + 1}: "${line.trim()}" -> parts: [${parts.join(', ')}]`);
             
             if (parts.length >= 2) {
-                const paradigmId = parts[0];
+                const prefixNumber = parts[0]; // This is the prefix number (1, 2, 3, 4)
                 const word = parts[1];
-                this.rootWords.set(word, paradigmId);
-                console.log(`Added root word: ${word} -> paradigm ${paradigmId}`);
+                this.rootWords.set(word, prefixNumber);
+                console.log(`Added root word: ${word} -> prefix number ${prefixNumber}`);
             } else {
                 console.warn(`Line ${index + 1} has insufficient parts (${parts.length}):`, parts);
             }
@@ -109,20 +109,18 @@ class MorphologyAnalyzer {
             const parts = line.trim().split(/\s+/);
             console.log(`Line ${lineIndex + 1}: "${line.trim()}" -> ${parts.length} parts: [${parts.join(', ')}]`);
             
-            if (parts.length >= 6) {
-                const paradigmId = parts[0];
+            if (parts.length >= 10) {
+                const prefixNumber = parts[0]; // This is the prefix number (1, 2, 3, 4)
                 const rootWord = parts[1];
-                const wordForms = parts.slice(2, 6).map(t => t.trim());
+                const transformations = parts.slice(2, 10).map(t => t.trim());
                 
-                console.log(`Processing line ${lineIndex + 1}: ID=${paradigmId}, Root=${rootWord}, Forms=[${wordForms.join(', ')}]`);
-                console.log(`Word forms array details: length=${wordForms.length}, types=[${wordForms.map(w => typeof w).join(', ')}]`);
-                console.log(`Individual word forms:`, wordForms.map((w, i) => `[${i}]: "${w}" (${typeof w})`));
+                console.log(`Processing line ${lineIndex + 1}: Prefix=${prefixNumber}, Root=${rootWord}, Transformations=[${transformations.join(', ')}]`);
                 
-                this.paradigmData.set(paradigmId, {
+                this.paradigmData.set(prefixNumber, {
                     root: rootWord,
-                    wordForms: wordForms
+                    transformations: transformations
                 });
-                console.log(`Added paradigm ${paradigmId}: root="${rootWord}", wordForms=`, wordForms);
+                console.log(`Added paradigm for prefix ${prefixNumber}: root="${rootWord}", transformations=`, transformations);
             } else {
                 console.warn(`Line ${lineIndex + 1} has insufficient parts (${parts.length}):`, parts);
             }
@@ -149,16 +147,16 @@ class MorphologyAnalyzer {
 
     // Get paradigm for selected root
     getParadigm(rootWord) {
-        const paradigmId = this.rootWords.get(rootWord);
-        console.log(`Getting paradigm for ${rootWord}: paradigm ID ${paradigmId}`);
+        const prefixNumber = this.rootWords.get(rootWord);
+        console.log(`Getting paradigm for ${rootWord}: prefix number ${prefixNumber}`);
         console.log('Available root words:', Array.from(this.rootWords.keys()));
-        console.log('Available paradigm IDs:', Array.from(this.paradigmData.keys()));
+        console.log('Available paradigm prefixes:', Array.from(this.paradigmData.keys()));
         
-        if (paradigmId) {
-            const paradigm = this.paradigmData.get(paradigmId);
+        if (prefixNumber) {
+            const paradigm = this.paradigmData.get(prefixNumber);
             console.log('Found paradigm:', paradigm);
             if (!paradigm) {
-                console.error(`Paradigm ID ${paradigmId} not found in paradigmData`);
+                console.error(`Paradigm for prefix ${prefixNumber} not found in paradigmData`);
                 console.log('Available paradigms:', Array.from(this.paradigmData.entries()));
             }
             return paradigm;
@@ -180,38 +178,30 @@ class MorphologyAnalyzer {
             return null;
         }
 
-        const wordForms = paradigm.wordForms;
-        console.log('Word forms from paradigm:', wordForms);
-        console.log('Word forms length:', wordForms.length);
+        const transformations = paradigm.transformations;
+        console.log('Transformations from paradigm:', transformations);
+        console.log('Transformations length:', transformations.length);
 
         const forms = [
-            { number: 'Singular', case: 'Direct', index: 0 },
-            { number: 'Singular', case: 'Oblique', index: 1 },
-            { number: 'Plural', case: 'Direct', index: 2 },
-            { number: 'Plural', case: 'Oblique', index: 3 }
+            { number: 'singular', case: 'direct', index: 0 },
+            { number: 'singular', case: 'oblique', index: 1 },
+            { number: 'plural', case: 'direct', index: 2 },
+            { number: 'plural', case: 'oblique', index: 3 }
         ];
 
         const result = forms.map(form => {
-            const word = wordForms[form.index];
-            console.log(`Form ${form.index}: ${form.number} ${form.case} -> word: "${word}" (type: ${typeof word}, length: ${word ? word.length : 'undefined'})`);
+            const deleteIndex = form.index * 2;
+            const addIndex = form.index * 2 + 1;
+            const deleteOp = transformations[deleteIndex] || '';
+            const addOp = transformations[addIndex] || '';
             
-            // Check if word is undefined, null, or empty
-            if (word === undefined) {
-                console.error(`Word at index ${form.index} is undefined!`);
-                console.error(`wordForms array:`, wordForms);
-                console.error(`wordForms length:`, wordForms.length);
-            } else if (word === null) {
-                console.error(`Word at index ${form.index} is null!`);
-            } else if (word === '') {
-                console.error(`Word at index ${form.index} is empty string!`);
-            }
+            console.log(`Form ${form.index}: ${form.number} ${form.case} -> delete: "${deleteOp}", add: "${addOp}"`);
             
             return {
-                word: word,
-                root: rootWord,
+                deleteOp: deleteOp,
+                addOp: addOp,
                 number: form.number,
-                case: form.case,
-                transformation: null // No delete/add for this new format
+                case: form.case
             };
         });
         
@@ -226,7 +216,7 @@ class MorphologyAnalyzer {
         let result = root;
         
         // Handle delete operation
-        if (delSuffix && delSuffix !== 'none') {
+        if (delSuffix && delSuffix !== '') {
             if (root.endsWith(delSuffix)) {
                 result = root.slice(0, root.length - delSuffix.length);
                 console.log(`Deleted suffix "${delSuffix}": "${root}" -> "${result}"`);
@@ -237,7 +227,7 @@ class MorphologyAnalyzer {
         }
         
         // Handle add operation
-        if (addSuffix && addSuffix !== 'none') {
+        if (addSuffix && addSuffix !== '') {
             result = result + addSuffix;
             console.log(`Added suffix "${addSuffix}": "${result}" -> "${result}"`);
         }
@@ -251,14 +241,16 @@ class MorphologyAnalyzer {
         const paradigm = this.getParadigm(rootWord);
         if (!paradigm) return [];
 
-        const { wordForms } = paradigm;
+        const { transformations } = paradigm;
         const answers = [];
         
-        // For each word form, calculate what needs to be deleted and added
-        wordForms.forEach((targetForm, index) => {
-            const { deleteOp, addOp } = this.calculateTransformation(rootWord, targetForm);
-            answers.push(deleteOp, addOp);
-        });
+        // The new format has 8 transformations: [del_sing_dr, add_sing_dr, del_sing_ob, add_sing_ob, del_plu_dr, add_plu_dr, del_plu_ob, add_plu_ob]
+        // This maps directly to the 8 UI fields
+        
+        answers.push(transformations[0], transformations[1]); // Singular Direct: delete, add
+        answers.push(transformations[2], transformations[3]); // Singular Oblique: delete, add  
+        answers.push(transformations[4], transformations[5]); // Plural Direct: delete, add
+        answers.push(transformations[6], transformations[7]); // Plural Oblique: delete, add
         
         return answers;
     }
@@ -267,35 +259,47 @@ class MorphologyAnalyzer {
     calculateTransformation(root, target) {
         console.log(`Calculating transformation: "${root}" -> "${target}"`);
         
-        // If root and target are the same, no transformation needed
+        // If root and target are the same, show the transformation operations
         if (root === target) {
-            return { deleteOp: 'none', addOp: 'none' };
+            // For words that end with a suffix (like लड़की ends with ई), show remove and add that suffix
+            // For words without a suffix (like पुस्तक), show empty operations
+            if (root.length > 3) { // Assuming most Hindi words are at least 3 characters
+                // Check if the word ends with common Hindi suffixes
+                const commonSuffixes = ['ी', 'ा', 'े', 'ो', 'ं', 'ाँ', 'ें', 'ों'];
+                for (const suffix of commonSuffixes) {
+                    if (root.endsWith(suffix)) {
+                        return { deleteOp: suffix, addOp: suffix };
+                    }
+                }
+            }
+            return { deleteOp: '', addOp: '' };
         }
         
-        // Find the longest common suffix between root and target
-        let commonSuffix = '';
-        let rootIndex = root.length - 1;
-        let targetIndex = target.length - 1;
+        // Find the longest common prefix between root and target
+        let commonPrefix = '';
+        let minLength = Math.min(root.length, target.length);
         
-        while (rootIndex >= 0 && targetIndex >= 0 && root[rootIndex] === target[targetIndex]) {
-            commonSuffix = root[rootIndex] + commonSuffix;
-            rootIndex--;
-            targetIndex--;
+        for (let i = 0; i < minLength; i++) {
+            if (root[i] === target[i]) {
+                commonPrefix += root[i];
+            } else {
+                break;
+            }
         }
         
-        // Calculate what to delete from root
-        let deleteOp = 'none';
-        if (rootIndex < root.length - 1) {
-            deleteOp = root.substring(rootIndex + 1);
+        // Calculate what to delete from root (everything after the common prefix)
+        let deleteOp = '';
+        if (commonPrefix.length < root.length) {
+            deleteOp = root.substring(commonPrefix.length);
         }
         
-        // Calculate what to add after the common part
-        let addOp = 'none';
-        if (targetIndex >= 0) {
-            addOp = target.substring(0, targetIndex + 1);
+        // Calculate what to add after the common prefix
+        let addOp = '';
+        if (commonPrefix.length < target.length) {
+            addOp = target.substring(commonPrefix.length);
         }
         
-        console.log(`Transformation: delete="${deleteOp}", add="${addOp}"`);
+        console.log(`Transformation: root="${root}", target="${target}", commonPrefix="${commonPrefix}", delete="${deleteOp}", add="${addOp}"`);
         return { deleteOp, addOp };
     }
 
@@ -327,12 +331,6 @@ class MorphologyAnalyzer {
             return true;
         }
         
-                // Handle special case where "none" and empty string should be equivalent
-        if ((userAnswer === 'none') &&
-            (correctAnswer === '' || correctAnswer === 'none' || correctAnswer === 'Select...')) {
-            return true;
-        }
-        
         return false;
     }
 
@@ -340,24 +338,24 @@ class MorphologyAnalyzer {
     validateParadigmData() {
         console.log('Validating paradigm data...');
         for (const [paradigmId, paradigm] of this.paradigmData.entries()) {
-            const wordForms = paradigm.wordForms;
+            const transformations = paradigm.transformations;
             const root = paradigm.root;
 
             // Basic sanity checks
-            if (!Array.isArray(wordForms) || wordForms.length !== 4) {
-                console.warn(`WARNING: Paradigm ${paradigmId} has malformed word forms.`);
+            if (!Array.isArray(transformations) || transformations.length !== 8) {
+                console.warn(`WARNING: Paradigm ${paradigmId} has malformed transformations.`);
                 continue;
             }
 
-            // Ensure tokens are non-empty strings ("none" is allowed)
-            wordForms.forEach(form => {
-                if (typeof form !== 'string' || form.length === 0) {
-                    console.warn(`WARNING: Paradigm ${paradigmId} contains an empty word form.`);
+            // Ensure tokens are non-empty strings
+            transformations.forEach(transformation => {
+                if (typeof transformation !== 'string') {
+                    console.warn(`WARNING: Paradigm ${paradigmId} contains a non-string transformation.`);
                 }
             });
 
             // Log useful info
-            console.log(`Paradigm ${paradigmId}: root="${root}", wordForms=${JSON.stringify(wordForms)}`);
+            console.log(`Paradigm ${paradigmId}: root="${root}", transformations=${JSON.stringify(transformations)}`);
         }
         console.log('Paradigm data validation complete.');
     }
@@ -478,8 +476,8 @@ function showParadigmTable(rootWord) {
         <table class="paradigm-display-table">
             <thead>
                 <tr>
-                    <th>Word</th>
-                    <th>Root</th>
+                    <th>Delete</th>
+                    <th>Add</th>
                     <th>Number</th>
                     <th>Case</th>
                 </tr>
@@ -488,11 +486,11 @@ function showParadigmTable(rootWord) {
     `;
 
     wordForms.forEach((form, index) => {
-        console.log(`Form ${index}: word="${form.word}", root="${form.root}", number="${form.number}", case="${form.case}"`);
+        console.log(`Form ${index}: delete="${form.deleteOp}", add="${form.addOp}", number="${form.number}", case="${form.case}"`);
         tableHTML += `
             <tr>
-                <td>${form.word || '(empty)'}</td>
-                <td>${form.root || '(empty)'}</td>
+                <td>${form.deleteOp || ''}</td>
+                <td>${form.addOp || ''}</td>
                 <td>${form.number}</td>
                 <td>${form.case}</td>
             </tr>
@@ -507,6 +505,12 @@ function showParadigmTable(rootWord) {
     paradigmTable.innerHTML = tableHTML;
     
     console.log('paradigmTable.innerHTML after:', paradigmTable.innerHTML);
+    
+    // Update the selected word in the title
+    const selectedWordSpan = document.getElementById('selectedWord');
+    if (selectedWordSpan) {
+        selectedWordSpan.textContent = rootWord;
+    }
     
     // Ensure the paradigm section is visible
     paradigmSection.style.display = 'block';
@@ -816,18 +820,18 @@ function showCorrectAnswers() {
         { number: 'Plural', case: 'Oblique', index: 3 }
     ];
 
-    categories.forEach((cat, index) => {
-        const deleteIndex = index * 2;
-        const addIndex = index * 2 + 1;
-        answerHTML += `
-            <tr>
-                <td>${morphologyAnalyzer.correctAnswers[deleteIndex] || 'none'}</td>
-                <td>${morphologyAnalyzer.correctAnswers[addIndex] || 'none'}</td>
-                <td>${cat.number}</td>
-                <td>${cat.case}</td>
-            </tr>
-        `;
-    });
+            categories.forEach((cat, index) => {
+            const deleteIndex = index * 2;
+            const addIndex = index * 2 + 1;
+            answerHTML += `
+                <tr>
+                    <td>${morphologyAnalyzer.correctAnswers[deleteIndex] || ''}</td>
+                    <td>${morphologyAnalyzer.correctAnswers[addIndex] || ''}</td>
+                    <td>${cat.number}</td>
+                    <td>${cat.case}</td>
+                </tr>
+            `;
+        });
 
     answerHTML += '</tbody></table>';
     correctAnswer.innerHTML = answerHTML;
