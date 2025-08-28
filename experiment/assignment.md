@@ -1,15 +1,25 @@
-**Questions**
+**1.** Complete the Add-Delete table for the following Hindi words:
 
-**Q1**. Select words from this which belong to the same paradigm: मनुष्य(manuShya), पक्षी(pakshii), शिशु(shishu), गुरु(guruu), नर(nar)
+**Word**: लड़का (laDkaa) - "boy"<br/>
+**root**: लड़क 	**category**: noun 	**gender**: male 	**number**: singular 	**case**: direct<br/>
+**root**: लड़क 	**category**: noun 	**gender**: male 	**number**: singular 	**case**: oblique<br/>
+**root**: लड़क 	**category**: noun 	**gender**: male 	**number**: plural 	**case**: direct<br/>
+**root**: लड़क 	**category**: noun 	**gender**: male 	**number**: plural 	**case**: oblique
 
-**Q2**. Construct the paradigm table for the above words.
+**Word**: पुस्तक (pustak) - "book"<br/>
+**root**: पुस्तक 	**category**: noun 	**gender**: female 	**number**: singular 	**case**: direct<br/>
+**root**: पुस्तक 	**category**: noun 	**gender**: female 	**number**: singular 	**case**: oblique<br/>
+**root**: पुस्तक 	**category**: noun 	**gender**: female 	**number**: plural 	**case**: direct<br/>
+**root**: पुस्तक 	**category**: noun 	**gender**: female 	**number**: plural 	**case**: oblique
 
-**Q3**. Observe the following words from Bengali. Identify all the morphemes and their corresponding meanings.
+**Word**: बाग (bAg) - "garden"<br/>
+**root**: बाग 	**category**: noun 	**gender**: male 	**number**: singular 	**case**: direct<br/>
+**root**: बाग 	**category**: noun 	**gender**: male 	**number**: singular 	**case**: oblique<br/>
+**root**: बाग 	**category**: noun 	**gender**: male 	**number**: plural 	**case**: direct<br/>
+**root**: बाग 	**category**: noun 	**gender**: male 	**number**: plural 	**case**: oblique
 
-- kori '(I)do'
-
-- maari '(I) hit'
-
-- korchille '(You) were doing'
-
-- maar '(You) hit'
+**Word**: घर (ghar) - "house"<br/>
+**root**: घर 	**category**: noun 	**gender**: male 	**number**: singular 	**case**: direct<br/>
+**root**: घर 	**category**: noun 	**gender**: male 	**number**: singular 	**case**: oblique<br/>
+**root**: घर 	**category**: noun 	**gender**: male 	**number**: plural 	**case**: direct<br/>
+**root**: घर 	**category**: noun 	**gender**: male 	**number**: plural 	**case**: oblique
