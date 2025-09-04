@@ -1,0 +1,158 @@
+{
+  "version": 2.0,
+  "questions": [
+    {
+      "question": "What is morphology in linguistics?",
+      "answers": {
+        "a": "The study of how words are pronounced",
+        "b": "The study of the internal structure of words and how they are formed",
+        "c": "The study of sentence structure and word order",
+        "d": "The study of word meanings and definitions"
+      },
+      "explanations": {
+        "a": "Incorrect. Phonetics studies pronunciation, not morphology.",
+        "b": "Correct! Morphology is the branch of linguistics that studies the internal structure of words and how they are formed from smaller meaningful units called morphemes.",
+        "c": "Incorrect. Syntax studies sentence structure and word order, not morphology.",
+        "d": "Incorrect. Semantics studies word meanings, not morphology."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "In Hindi, what is the root word in 'लड़कों' (ladkon - of boys)?",
+      "answers": {
+        "a": "लड़कों",
+        "b": "लड़के",
+        "c": "लड़क",
+        "d": "लड़का"
+      },
+      "explanations": {
+        "a": "Incorrect. This is the complete word, not the root.",
+        "b": "Incorrect. This is a different form of the word, not the root.",
+        "c": "Correct! The root word is 'लड़क' (ladak). The word 'लड़कों' is formed by adding the suffix 'ों' to indicate the oblique plural case.",
+        "d": "Incorrect. This is the singular form, not the root."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Which of the following is NOT a grammatical feature typically analyzed in Hindi morphology?",
+      "answers": {
+        "a": "Gender (लिंग)",
+        "b": "Number (वचन)",
+        "c": "Font size",
+        "d": "Case (कारक)"
+      },
+      "explanations": {
+        "a": "Incorrect. Gender is an important grammatical feature analyzed in Hindi morphology.",
+        "b": "Incorrect. Number (singular/plural) is a fundamental grammatical feature in Hindi.",
+        "c": "Correct! Font size is a visual presentation feature, not a linguistic feature of words.",
+        "d": "Incorrect. Case is a crucial grammatical feature in Hindi morphology."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "What is the difference between inflectional and derivational morphology in Hindi?",
+      "answers": {
+        "a": "There is no difference - they are the same thing",
+        "b": "Inflectional morphology changes grammatical features without changing word class, while derivational morphology creates new words",
+        "c": "Inflectional morphology only applies to verbs, derivational only to nouns",
+        "d": "Inflectional morphology is more important than derivational morphology"
+      },
+      "explanations": {
+        "a": "Incorrect. While related, inflectional and derivational morphology have distinct linguistic definitions.",
+        "b": "Correct! Inflectional morphology changes grammatical features (like number, gender, case) without changing the word's core meaning or category. Derivational morphology creates new words, often changing the grammatical category.",
+        "c": "Incorrect. Both inflectional and derivational morphology can apply to various word classes.",
+        "d": "Incorrect. Both types of morphology are equally important in language analysis."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "In Hindi, what does the suffix '-ई' typically indicate?",
+      "answers": {
+        "a": "Masculine singular",
+        "b": "Feminine gender",
+        "c": "Plural number",
+        "d": "Past tense"
+      },
+      "explanations": {
+        "a": "Incorrect. Masculine singular is typically marked by '-आ' in Hindi.",
+        "b": "Correct! The suffix '-ई' in Hindi typically indicates feminine gender. For example, 'लड़का' (boy) becomes 'लड़की' (girl) when the '-ई' suffix is added.",
+        "c": "Incorrect. Plural number is typically marked by different suffixes like '-ए' or '-याँ'.",
+        "d": "Incorrect. Past tense is marked by different morphological patterns in Hindi."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "What is a postposition in Hindi grammar?",
+      "answers": {
+        "a": "A word that comes before a noun",
+        "b": "A word that follows a noun to indicate grammatical relationships",
+        "c": "A type of verb ending",
+        "d": "A punctuation mark"
+      },
+      "explanations": {
+        "a": "Incorrect. Words that come before nouns are called prepositions in English, not postpositions.",
+        "b": "Correct! Postpositions in Hindi are words that follow nouns to indicate grammatical relationships, similar to prepositions in English. Common examples include 'का/की/के' (of), 'को' (to), 'में' (in), 'से' (from).",
+        "c": "Incorrect. Verb endings are part of verb morphology, not postpositions.",
+        "d": "Incorrect. Punctuation marks are not grammatical words."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "What is the concept of 'sandhi' in Hindi morphology?",
+      "answers": {
+        "a": "A type of sentence structure",
+        "b": "The process of combining morphemes with sound changes",
+        "c": "A grammatical case marker",
+        "d": "A type of verb conjugation"
+      },
+      "explanations": {
+        "a": "Incorrect. Sentence structure is studied in syntax, not morphology.",
+        "b": "Correct! Sandhi refers to the process of combining morphemes with sound changes. In Hindi, this includes vowel sandhi (combining vowels), consonant sandhi (combining consonants), and visarga sandhi (changes involving visarga).",
+        "c": "Incorrect. Case markers are specific grammatical elements, not a process of combination.",
+        "d": "Incorrect. Verb conjugation is a different morphological process."
+      },
+      "correctAnswer": "b",
+      "difficulty": "advanced"
+    },
+    {
+      "question": "How does gender agreement work in Hindi morphology?",
+      "answers": {
+        "a": "Only nouns have gender, other words don't change",
+        "b": "Gender affects only the subject of the sentence",
+        "c": "Adjectives, verbs, and other words must agree with the noun's gender",
+        "d": "Gender agreement is optional in Hindi"
+      },
+      "explanations": {
+        "a": "Incorrect. Gender agreement affects multiple word classes in Hindi, not just nouns.",
+        "b": "Incorrect. Gender agreement affects various elements in the sentence, not just subjects.",
+        "c": "Correct! In Hindi, gender agreement requires that adjectives, verbs, and other related words must agree with the noun's gender. This creates a complex system where multiple words in a sentence change form based on the gender of the main noun.",
+        "d": "Incorrect. Gender agreement is a fundamental grammatical requirement in Hindi."
+      },
+      "correctAnswer": "c",
+      "difficulty": "advanced"
+    },
+    {
+      "question": "What is the difference between direct case (कर्ता कारक) and oblique case (कर्म कारक) in Hindi?",
+      "answers": {
+        "a": "Direct case is used for subjects, oblique case for objects",
+        "b": "Direct case is used when no postposition follows, oblique case when a postposition follows",
+        "c": "Direct case is only for singular nouns, oblique case for plural nouns",
+        "d": "There is no difference between them"
+      },
+      "explanations": {
+        "a": "Incorrect. The distinction is not based on grammatical function but on postposition usage.",
+        "b": "Correct! In Hindi, the direct case (कर्ता कारक) is used when no postposition follows the noun, while the oblique case (कर्म कारक) is used when a postposition follows the noun. This affects how the noun changes form.",
+        "c": "Incorrect. Both cases can be used with singular and plural nouns.",
+        "d": "Incorrect. There are clear morphological differences between direct and oblique cases in Hindi."
+      },
+      "correctAnswer": "b",
+      "difficulty": "advanced"
+    }
+  ]
+} 

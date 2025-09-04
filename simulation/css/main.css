@@ -1,0 +1,2127 @@
+:root {
+  --color-primary: #4361ee;
+  --color-primary-light: #4895ef;
+  --color-primary-dark: #3a0ca3;
+  --color-secondary: #4cc9f0;
+  --color-secondary-light: #72efdd;
+  --color-secondary-dark: #3f8efc;
+  --color-accent: #f72585;
+  --color-accent-light: #ff8fab;
+  --color-accent-dark: #b5179e;
+  --color-success: #4caf50;
+  --color-error: #f44336;
+  --color-neutral-50: #f8fafc;
+  --color-neutral-100: #f1f5f9;
+  --color-neutral-200: #e2e8f0;
+  --color-neutral-300: #cbd5e1;
+  --color-neutral-400: #94a3b8;
+  --color-neutral-500: #64748b;
+  --color-neutral-600: #475569;
+  --color-neutral-700: #334155;
+  --color-neutral-800: #1e293b;
+  --color-neutral-900: #0f172a;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --shadow-md: 0 4px 6px -1px rgba(67, 97, 238, 0.08),
+    0 2px 4px -1px rgba(67, 97, 238, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(67, 97, 238, 0.1),
+    0 4px 6px -2px rgba(67, 97, 238, 0.05);
+
+  /* Legacy variables for backward compatibility */
+  --primary-color: var(--color-primary);
+  --secondary-color: var(--color-secondary);
+  --success-color: var(--color-success);
+  --error-color: var(--color-error);
+  --text-color: var(--color-neutral-800);
+  --background-color: var(--color-neutral-50);
+  --border-color: var(--color-neutral-200);
+  --info-color: var(--color-primary);
+  --hint-color: var(--color-neutral-600);
+  --pane-bg: #fff;
+  --pane-border: var(--color-neutral-200);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Noto Sans Devanagari", "Arial Unicode MS", Roboto, Oxygen, Ubuntu,
+    Cantarell, sans-serif;
+  line-height: 1.6;
+  color: var(--color-neutral-800);
+  background-color: var(--color-neutral-50);
+  font-size: 0.97em;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Main container fixes */
+.simulation-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.main-content {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  justify-items: center;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  padding: 0 0.5rem;
+  min-height: 100vh;
+}
+
+/* Instructions Panel */
+.instructions-panel {
+  width: 100%;
+  max-width: 1400px;
+  margin: 1.2rem auto 1.2rem auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  padding: 0 0.5rem;
+  border-radius: 0.75rem;
+  grid-row: 1;
+  grid-column: 1 / -1;
+}
+
+.instructions-header.clickable {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7em;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  cursor: pointer;
+  padding: 0.7em 0;
+  background: linear-gradient(90deg, #6ef2e6 0%, #4895ef 100%);
+  border-radius: 1.2em 1.2em 0 0;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(67, 97, 238, 0.04);
+  border-bottom: 1px solid var(--color-neutral-200);
+  margin: 0;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.instructions-header.clickable:hover,
+.instructions-header.clickable:focus {
+  background: var(--color-secondary-light);
+  box-shadow: 0 4px 16px rgba(67, 97, 238, 0.1);
+}
+
+.instructions-header.clickable h3 {
+  margin: 0;
+  font-size: 1.2em;
+  font-weight: 700;
+  color: #2a1a6e;
+  letter-spacing: 0.01em;
+  text-align: center;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.instructions-header .arrow-icon {
+  margin-left: 0.7em;
+  font-size: 1.3em;
+  color: var(--color-primary-dark);
+  display: flex;
+  align-items: center;
+}
+
+.instructions-content {
+  background-color: white;
+  padding: 1rem;
+  border: 1px solid var(--color-neutral-200);
+  border-top: none;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+  max-height: 300px;
+  opacity: 1;
+  overflow: hidden;
+}
+
+.instructions-content.collapsed {
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.instructions-list {
+  list-style: disc inside;
+  margin: 0.1em 0 0.1em 1em;
+  padding: 0;
+  font-size: 0.95em;
+  color: var(--color-neutral-800);
+  line-height: 1.4;
+}
+
+.instructions-list li {
+  margin-bottom: 0.2em;
+}
+
+/* Three-pane Layout */
+.three-pane-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 0.2em;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  justify-items: center;
+  grid-row: 2;
+  grid-column: 1 / -1;
+  padding: 0 0.5rem;
+}
+
+.pane {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 280px;
+  max-width: 450px;
+  padding: 1rem;
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--pane-border);
+  margin: 0 auto;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  min-height: 400px;
+  overflow: hidden;
+  /* Ensure strict containment */
+  position: relative;
+}
+
+.pane-1,
+.pane-2,
+.pane-3 {
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Pane Headers */
+.pane-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-neutral-200);
+}
+
+.pane-header h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin: 0;
+  flex: 1;
+}
+
+.pane-header .fas {
+  color: var(--color-primary-dark);
+  font-size: 1rem;
+}
+
+/* Selection Block */
+.selection-block {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-neutral-700);
+  margin-bottom: 0.3rem;
+}
+
+/* Features Grid */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.feature-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.feature-group label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-neutral-700);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.feature-group label .fas {
+  color: var(--color-primary);
+  font-size: 0.8rem;
+  cursor: help;
+}
+
+/* Button Group */
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+/* Step Headers */
+.step-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.step-title {
+  flex: 1;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin: 0;
+}
+
+/* Info Icons */
+.info-icon {
+  color: var(--color-primary-dark) !important;
+  background: var(--color-secondary-light);
+  border-radius: 50%;
+  width: 1.3em;
+  height: 1.3em;
+  text-align: center;
+  line-height: 1.3em;
+  font-weight: bold;
+  border: 1px solid var(--color-primary-light);
+  font-size: 0.9rem;
+  margin-left: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.info-icon:focus {
+  outline: 2px solid var(--color-primary);
+}
+
+/* Word Selection */
+.word-selection-block {
+  margin-top: 0.7em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+}
+
+.pane-label {
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--color-primary-dark);
+  margin-bottom: 0.3rem;
+}
+
+.select-box {
+  width: 100%;
+  min-width: 120px;
+  max-width: 220px;
+  font-size: 0.98rem;
+  padding: 0.35rem 0.5rem;
+  margin: 0;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-neutral-300);
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-800);
+  transition: all 0.2s;
+}
+
+.select-box:disabled {
+  background-color: var(--color-neutral-200);
+  cursor: not-allowed;
+}
+
+.select-box:focus {
+  outline: 2px solid var(--color-primary);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.1);
+}
+
+/* Form Select Styling */
+.form-select {
+  width: 100%;
+  max-width: 100%;
+  font-size: 0.9rem;
+  padding: 0.5rem;
+  margin: 0;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-neutral-300);
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-800);
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+
+.form-select:disabled {
+  background-color: var(--color-neutral-200);
+  cursor: not-allowed;
+}
+
+.form-select:focus {
+  outline: 2px solid var(--color-primary);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.1);
+}
+
+/* Correct/Incorrect States */
+.form-select.correct {
+  border-color: var(--color-success);
+  background-color: #e8f5e9;
+}
+
+.form-select.incorrect {
+  border-color: var(--color-error);
+  background-color: #ffebee;
+}
+
+.select-box.correct {
+  border-color: var(--color-success);
+  background-color: #e8f5e9;
+}
+
+.select-box.incorrect {
+  border-color: var(--color-error);
+  background-color: #ffebee;
+}
+
+/* Enhanced wrong answer highlighting */
+.select-box.incorrect,
+.form-select.incorrect {
+  box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.2);
+  animation: wrongAnswerPulse 0.5s ease-in-out;
+}
+
+@keyframes wrongAnswerPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Features Display */
+.features-display {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.feature-item {
+  padding: 0.3rem 0.5rem;
+  background-color: var(--color-neutral-100);
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+}
+
+.correct-answer {
+  background-color: #e8f5e9;
+  border: 1px solid var(--color-success);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin-top: 0.5rem;
+}
+
+.feedback-container.info {
+  background-color: #e3f2fd;
+  color: var(--color-primary-dark);
+}
+
+/* Paradigm Section */
+.paradigm-section {
+  margin-top: 1.5rem;
+}
+
+.paradigm-section h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-primary-dark);
+  margin-bottom: 0.5rem;
+}
+
+/* Paradigm table styling */
+.paradigm-display-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  background: white;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.paradigm-display-table th,
+.paradigm-display-table td {
+  padding: 0.5rem;
+  text-align: left;
+  border: 1px solid var(--color-neutral-300);
+  word-wrap: break-word;
+  white-space: normal;
+  overflow-wrap: break-word;
+  max-width: 0;
+}
+
+.paradigm-display-table th {
+  background-color: var(--color-primary);
+  color: white;
+  font-weight: 600;
+}
+
+.paradigm-display-table td {
+  background-color: #f9f9f9;
+}
+
+/* Add-Delete Table */
+.add-delete-section {
+  margin-top: 1rem;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+/* Add-Delete table styling */
+.add-delete-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  min-width: auto;
+  max-width: 100%;
+  table-layout: auto;
+}
+
+.add-delete-table th,
+.add-delete-table td {
+  padding: 0.3rem 0.2rem;
+  text-align: center;
+  border: 1px solid var(--color-neutral-300);
+  vertical-align: middle;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 0;
+}
+
+.add-delete-table th {
+  background-color: var(--color-primary);
+  color: white;
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.4rem 0.2rem;
+  /* Prevent text wrapping in headers */
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.add-delete-table td {
+  background-color: white;
+}
+
+.add-delete-table .select-box {
+  width: 100%;
+  max-width: 60px;
+  min-width: 50px;
+  font-size: 0.75rem;
+  padding: 0.2rem;
+  border: 1px solid var(--color-neutral-300);
+  border-radius: 3px;
+  box-sizing: border-box;
+}
+
+.check-cell {
+  width: 25px;
+  text-align: center;
+  padding: 0.2rem;
+}
+
+/* Make table columns more proportional and responsive */
+.add-delete-table th:nth-child(1),
+.add-delete-table td:nth-child(1) {
+  width: 18%; /* Delete column - slightly smaller */
+  min-width: 60px;
+}
+
+.add-delete-table th:nth-child(2),
+.add-delete-table td:nth-child(2) {
+  width: 18%; /* Add column - slightly smaller */
+  min-width: 60px;
+}
+
+.add-delete-table th:nth-child(3),
+.add-delete-table td:nth-child(3) {
+  width: 27%; /* Number column - slightly larger */
+  min-width: 80px;
+}
+
+.add-delete-table th:nth-child(4),
+.add-delete-table td:nth-child(4) {
+  width: 27%; /* Case column - slightly larger */
+  min-width: 80px;
+}
+
+.add-delete-table th:nth-child(5),
+.add-delete-table td:nth-child(5) {
+  width: 15%; /* Results column - increased width */
+  min-width: 80px;
+}
+
+/* Buttons */
+.button-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0 0.5rem 0;
+  justify-content: flex-start;
+}
+
+.primary-button,
+.secondary-button {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-sizing: border-box;
+}
+
+.primary-button {
+  background: var(--color-primary);
+  color: white;
+}
+
+.primary-button:hover:not(:disabled) {
+  background: var(--color-primary-dark);
+  transform: translateY(-1px);
+}
+
+.secondary-button {
+  background: var(--color-secondary);
+  color: white;
+}
+
+.secondary-button:hover:not(:disabled) {
+  background: var(--color-secondary-dark);
+  transform: translateY(-1px);
+}
+
+.primary-button:disabled {
+  background: var(--color-neutral-400);
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Feedback */
+.feedback-container {
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.feedback-container.error {
+  background-color: #ffebee;
+  color: var(--color-error);
+}
+
+.feedback-container.success {
+  background-color: #e8f5e9;
+  color: var(--color-success);
+}
+
+/* Answer Container */
+.answer-container {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: white;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-neutral-200);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  /* Ensure strict containment */
+  position: relative;
+}
+
+.answer-container h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-primary-dark);
+  margin-bottom: 0.5rem;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.answer-container:not(:empty) {
+  display: block; /* Show when content is added */
+  padding: 1em;
+  border: 2px solid var(--color-success);
+  background: #f0f9ff;
+}
+
+/* Ensure tables are properly contained */
+.answer-container .correct-answer-table {
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
+  margin: 0;
+  padding: 0;
+  /* Force table to stay within container */
+  position: relative;
+  box-sizing: border-box;
+}
+
+.answer-container .correct-answer-table table {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  /* Ensure table respects container boundaries */
+  table-layout: auto;
+  box-sizing: border-box;
+}
+
+.correct-answer-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  max-width: 100%;
+  table-layout: auto;
+  /* Ensure table stays within its container */
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+.correct-answer-table th,
+.correct-answer-table td {
+  padding: 0.4rem;
+  text-align: center;
+  border: 1px solid var(--color-neutral-300);
+  word-wrap: normal;
+  overflow-wrap: normal;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 0;
+  /* Force content to stay within cell boundaries */
+  box-sizing: border-box;
+}
+
+.correct-answer-table th {
+  background-color: var(--color-success);
+  color: white;
+  font-weight: 600;
+}
+
+.correct-answer-table td {
+  background-color: #e8f5e9;
+}
+
+/* Make correct answer table columns responsive */
+.correct-answer-table th:nth-child(1),
+.correct-answer-table td:nth-child(1) {
+  width: 25%; /* Delete column */
+  min-width: 60px;
+}
+
+.correct-answer-table th:nth-child(2),
+.correct-answer-table td:nth-child(2) {
+  width: 25%; /* Add column */
+  min-width: 60px;
+}
+
+.correct-answer-table th:nth-child(3),
+.correct-answer-table td:nth-child(3) {
+  width: 25%; /* Number column */
+  min-width: 60px;
+}
+
+.correct-answer-table th:nth-child(4),
+.correct-answer-table td:nth-child(4) {
+  width: 25%; /* Case column */
+  min-width: 60px;
+}
+
+/* Responsive Design Updates */
+@media (max-width: 1200px) {
+  .three-pane-layout {
+    gap: 1rem;
+    padding: 0 0.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+
+  .pane {
+    min-width: 250px;
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 900px) {
+  .three-pane-layout {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 0 0.25rem;
+  }
+
+  .pane {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0;
+    margin: 0 0 1rem 0;
+    min-height: auto;
+  }
+
+  .add-delete-table {
+    font-size: 0.8rem;
+    min-width: auto;
+    width: 100%;
+  }
+
+  .add-delete-table th,
+  .add-delete-table td {
+    padding: 0.3rem 0.15rem;
+  }
+
+  .add-delete-table .select-box {
+    max-width: 55px;
+    min-width: 45px;
+    font-size: 0.7rem;
+  }
+
+  .paradigm-display-table {
+    min-width: 350px;
+  }
+}
+
+@media (max-width: 600px) {
+  .simulation-container,
+  .main-content {
+    padding: 0 0.25rem;
+  }
+
+  .three-pane-layout {
+    gap: 0.75rem;
+    padding: 0 0.25rem;
+  }
+
+  .pane {
+    padding: 0.8rem;
+    margin: 0 0 0.75rem 0;
+  }
+
+  .pane-header h3 {
+    font-size: 1rem;
+  }
+
+  .add-delete-table {
+    font-size: 0.75rem;
+    min-width: auto;
+    width: 100%;
+  }
+
+  .add-delete-table th,
+  .add-delete-table td {
+    padding: 0.25rem 0.1rem;
+  }
+
+  .add-delete-table .select-box {
+    max-width: 50px;
+    min-width: 40px;
+    font-size: 0.65rem;
+    padding: 0.1rem;
+  }
+
+  .button-group {
+    gap: 0.5rem;
+  }
+
+  .primary-button,
+  .secondary-button {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .paradigm-display-table {
+    min-width: 300px;
+    font-size: 0.8rem;
+  }
+
+  .paradigm-display-table th,
+  .paradigm-display-table td {
+    padding: 0.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .pane {
+    padding: 0.6rem;
+  }
+
+  .pane-header h3 {
+    font-size: 0.9rem;
+  }
+
+  .add-delete-table {
+    min-width: auto;
+    width: 100%;
+    font-size: 0.7rem;
+  }
+
+  .add-delete-table th,
+  .add-delete-table td {
+    padding: 0.2rem 0.1rem;
+    font-size: 0.65rem;
+  }
+
+  .add-delete-table .select-box {
+    max-width: 45px;
+    min-width: 35px;
+    font-size: 0.6rem;
+  }
+
+  .paradigm-display-table {
+    min-width: 250px;
+    font-size: 0.75rem;
+  }
+
+  .paradigm-display-table th,
+  .paradigm-display-table td {
+    padding: 0.2rem;
+  }
+}
+
+/* Additional mobile fixes */
+@media (max-width: 380px) {
+  .pane-header h3 {
+    font-size: 0.9rem;
+    line-height: 1.2;
+  }
+  .feature-group label {
+    font-size: 0.8rem;
+  }
+  .form-select,
+  .select-box {
+    font-size: 0.85rem;
+    padding: 0.25rem 0.3rem;
+  }
+  .primary-button,
+  .secondary-button {
+    font-size: 0.85em;
+    padding: 0.3rem 0.4rem;
+  }
+  .instructions-content {
+    padding: 0.6rem;
+  }
+  .instructions-list {
+    font-size: 0.85rem;
+  }
+
+  .add-delete-table {
+    min-width: auto;
+    width: 100%;
+    font-size: 0.65rem;
+  }
+
+  .add-delete-table th,
+  .add-delete-table td {
+    padding: 0.15rem 0.1rem;
+  }
+
+  .add-delete-table .select-box {
+    max-width: 40px;
+    min-width: 30px;
+    font-size: 0.55rem;
+  }
+
+  .paradigm-display-table {
+    min-width: 220px;
+  }
+}
+
+/* Mobile-first improvements */
+@media (max-width: 768px) {
+  .simulation-container {
+    padding: 0 0.25rem;
+  }
+
+  .main-content {
+    padding: 0 0.25rem;
+  }
+
+  .three-pane-layout {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .pane {
+    padding: 0.75rem;
+    margin: 0 0 0.75rem 0;
+    min-height: auto;
+  }
+
+  .pane-header h3 {
+    font-size: 1rem;
+  }
+
+  .form-select,
+  .select-box {
+    font-size: 0.9rem;
+    padding: 0.4rem;
+  }
+
+  .button-group {
+    gap: 0.5rem;
+  }
+
+  .primary-button,
+  .secondary-button {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .add-delete-table {
+    min-width: auto;
+    width: 100%;
+  }
+}
+
+/* Ensure proper table display on very small screens */
+@media (max-width: 400px) {
+  .add-delete-table {
+    min-width: auto;
+    width: 100%;
+    font-size: 0.7rem;
+  }
+
+  .add-delete-table th,
+  .add-delete-table td {
+    padding: 0.15rem 0.1rem;
+  }
+
+  .add-delete-table .select-box {
+    max-width: 42px;
+    min-width: 32px;
+    font-size: 0.6rem;
+    padding: 0.1rem;
+  }
+
+  .paradigm-display-table {
+    min-width: 200px;
+    font-size: 0.7rem;
+  }
+
+  .paradigm-display-table th,
+  .paradigm-display-table td {
+    padding: 0.15rem;
+  }
+
+  .pane {
+    padding: 0.5rem;
+  }
+
+  .pane-header h3 {
+    font-size: 0.85rem;
+  }
+}
+
+/* Prevent horizontal scrolling */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* Table responsiveness improvements */
+.table-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 0;
+  padding: 0;
+  max-width: 100%;
+}
+
+/* Ensure tables don't break layout */
+.paradigm-section,
+.add-delete-section {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+
+/* Force table to respect container width */
+.paradigm-display-table,
+.add-delete-table {
+  max-width: 100%;
+  width: 100%;
+}
+
+/* Ensure text wrapping in all table cells */
+.paradigm-display-table th,
+.paradigm-display-table td,
+.add-delete-table th,
+.add-delete-table td {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.simulation-container,
+.container,
+.main-content,
+.instructions-panel,
+.three-pane-layout {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Ensure form elements are responsive */
+.form-select,
+.select-box {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Features grid responsive improvements */
+.features-grid {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.feature-group {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Button group responsive improvements */
+.button-group {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Touch and mobile improvements */
+@media (hover: none) and (pointer: coarse) {
+  .primary-button,
+  .secondary-button {
+    padding: 0.6rem 1rem;
+    font-size: 1rem;
+    min-height: 44px; /* Minimum touch target size */
+  }
+
+  .form-select,
+  .select-box {
+    padding: 0.6rem 0.8rem;
+    font-size: 1rem;
+    min-height: 44px;
+  }
+
+  .instructions-header.clickable {
+    padding: 1rem 0;
+    min-height: 44px;
+  }
+}
+
+/* Ensure proper spacing on all screen sizes */
+.pane {
+  margin-bottom: 1.5rem;
+}
+
+.pane:last-child {
+  margin-bottom: 0;
+}
+
+/* Improved text wrapping */
+.pane-header h3 {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.feature-group label {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Ensure buttons don't overflow */
+.button-group {
+  overflow: hidden;
+}
+
+.primary-button,
+.secondary-button {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  text-align: center;
+}
+
+/* Fix for very small screens */
+@media (max-width: 320px) {
+  .simulation-container,
+  .container,
+  .main-content {
+    padding: 0 0.5rem;
+  }
+
+  /* Ensure Results column header doesn't wrap */
+  .add-delete-table th:nth-child(5) {
+    white-space: nowrap;
+    overflow: hidden;
+    min-width: 60px;
+  }
+
+  .pane {
+    padding: 0.5rem 0.3rem;
+  }
+
+  .pane-header h3 {
+    font-size: 0.85rem;
+    line-height: 1.2;
+  }
+
+  .feature-group label {
+    font-size: 0.75rem;
+  }
+
+  .form-select,
+  .select-box {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.3rem;
+  }
+
+  .primary-button,
+  .secondary-button {
+    font-size: 0.8em;
+    padding: 0.4rem 0.5rem;
+  }
+
+  .instructions-content {
+    padding: 0.5rem;
+  }
+
+  .instructions-list {
+    font-size: 0.8rem;
+  }
+}
+
+/* Morphology Content Layout */
+.morphology-content {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.root-selection-section {
+  background: #fff;
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-neutral-200);
+}
+
+.root-selection-section h3 {
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.word-selection-block {
+  margin-top: 0.7em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+}
+
+.word-selection-block .select-box {
+  width: 100%;
+  max-width: 300px;
+}
+
+/* Hindi/Devanagari specific styling */
+.paradigm-display-table td,
+.add-delete-table td,
+.select-box,
+.form-select,
+.correct-answer-table td {
+  font-family: "Noto Sans Devanagari", "Arial Unicode MS", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Ensure proper rendering of Hindi text in dropdowns */
+.select-box option,
+.form-select option {
+  font-family: "Noto Sans Devanagari", "Arial Unicode MS", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  padding: 0.3rem;
+}
+
+/* Pane 3 specific styling to ensure proper height distribution */
+.pane-right {
+  justify-content: flex-start;
+}
+
+.pane-right .step-header {
+  flex-shrink: 0;
+}
+
+.pane-right .button-container {
+  flex-shrink: 0;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.pane-right .feedback-container {
+  flex-shrink: 0;
+  margin-top: 1rem;
+}
+
+.pane-right .answer-container {
+  flex-shrink: 0;
+  margin-top: 1rem;
+}
+
+/* Ensure all panes have equal height and proper content distribution */
+.pane-left,
+.pane-middle,
+.pane-right {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* Ensure content sections expand properly */
+.paradigm-section {
+  flex: 1;
+  margin-top: 1rem;
+}
+
+.add-delete-section {
+  flex: 1;
+  margin-top: 1rem;
+}
+
+/* Ensure feedback and answer containers don't push buttons up */
+.pane-right .feedback-container,
+.pane-right .answer-container {
+  margin-top: 1rem;
+  flex-shrink: 0;
+}
+
+/* Responsive table improvements */
+@media (max-width: 900px) {
+  .add-delete-table {
+    font-size: 0.85rem;
+  }
+
+  .add-delete-table th,
+  .add-delete-table td {
+    padding: 0.4rem 0.2rem;
+  }
+
+  .add-delete-table .select-box {
+    max-width: 80px;
+    font-size: 0.8rem;
+    padding: 0.3rem;
+  }
+
+  .paradigm-display-table {
+    font-size: 0.85rem;
+  }
+
+  .paradigm-display-table th,
+  .paradigm-display-table td {
+    padding: 0.4rem 0.2rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .add-delete-table {
+    font-size: 0.8rem;
+  }
+
+  .add-delete-table th,
+  .add-delete-table td {
+    padding: 0.3rem 0.1rem;
+  }
+
+  .add-delete-table .select-box {
+    max-width: 70px;
+    font-size: 0.75rem;
+    padding: 0.2rem;
+  }
+
+  .paradigm-display-table {
+    font-size: 0.8rem;
+  }
+
+  .paradigm-display-table th,
+  .paradigm-display-table td {
+    padding: 0.3rem 0.1rem;
+  }
+}
+
+/* Ensure proper spacing in portrait mode */
+@media (orientation: portrait) and (max-width: 900px) {
+  .pane {
+    margin-bottom: 2rem;
+  }
+
+  .step-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .word-selection-block {
+    margin-top: 1rem;
+  }
+
+  .add-delete-section {
+    margin-top: 1.5rem;
+  }
+}
+
+/* Mobile Landscape Mode - Panes side by side */
+@media (max-width: 900px) and (orientation: landscape) {
+  .three-pane-layout {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    padding: 0 0.25rem;
+  }
+
+  .pane {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0;
+    margin: 0 0 0.5rem 0;
+    min-height: auto;
+    padding: 0.6rem;
+    overflow: hidden;
+  }
+
+  .pane-header h3 {
+    font-size: 0.9rem;
+    line-height: 1.2;
+  }
+
+  .add-delete-table {
+    font-size: 0.7rem;
+    min-width: auto;
+    width: 100%;
+    max-width: 100%;
+    table-layout: auto;
+  }
+
+  .add-delete-table th,
+  .add-delete-table td {
+    padding: 0.2rem 0.08rem;
+    font-size: 0.65rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .add-delete-table .select-box {
+    max-width: 40px;
+    min-width: 30px;
+    font-size: 0.6rem;
+    padding: 0.08rem;
+  }
+
+  .paradigm-display-table {
+    min-width: 180px;
+    font-size: 0.7rem;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .paradigm-display-table th,
+  .paradigm-display-table td {
+    padding: 0.15rem;
+    font-size: 0.65rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .button-group {
+    gap: 0.4rem;
+  }
+
+  .primary-button,
+  .secondary-button {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Mobile Portrait Mode - Panes stacked vertically */
+@media (max-width: 900px) and (orientation: portrait) {
+  .three-pane-layout {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 0 0.25rem;
+  }
+
+  .pane {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0;
+    margin: 0 0 1rem 0;
+    min-height: auto;
+  }
+
+  .add-delete-table {
+    font-size: 0.8rem;
+    min-width: auto;
+    width: 100%;
+  }
+
+  .add-delete-table th,
+  .add-delete-table td {
+    padding: 0.3rem 0.15rem;
+  }
+
+  .add-delete-table .select-box {
+    max-width: 55px;
+    min-width: 45px;
+    font-size: 0.7rem;
+  }
+
+  .paradigm-display-table {
+    min-width: 350px;
+  }
+}
+
+/* Mobile Landscape Mode - Panes side by side */
+@media (max-width: 600px) and (orientation: landscape) {
+  .simulation-container,
+  .main-content {
+    padding: 0 0.25rem;
+  }
+
+  .three-pane-layout {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    padding: 0 0.25rem;
+  }
+
+  .pane {
+    padding: 0.5rem;
+    margin: 0 0 0.4rem 0;
+  }
+
+  .pane-header h3 {
+    font-size: 0.85rem;
+    line-height: 1.1;
+  }
+
+  .add-delete-table {
+    font-size: 0.7rem;
+    min-width: auto;
+    width: 100%;
+  }
+
+  .add-delete-table th,
+  .add-delete-table td {
+    padding: 0.2rem 0.08rem;
+    font-size: 0.65rem;
+  }
+
+  .add-delete-table .select-box {
+    max-width: 40px;
+    min-width: 30px;
+    font-size: 0.6rem;
+    padding: 0.08rem;
+  }
+
+  .paradigm-display-table {
+    min-width: 180px;
+    font-size: 0.7rem;
+  }
+
+  .paradigm-display-table th,
+  .paradigm-display-table td {
+    padding: 0.15rem;
+    font-size: 0.65rem;
+  }
+
+  .button-group {
+    gap: 0.3rem;
+  }
+
+  .primary-button,
+  .secondary-button {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Mobile Portrait Mode - Panes stacked vertically */
+@media (max-width: 600px) and (orientation: portrait) {
+  .simulation-container,
+  .main-content {
+    padding: 0 0.25rem;
+  }
+
+  .three-pane-layout {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    padding: 0 0.25rem;
+  }
+
+  .pane {
+    padding: 0.8rem;
+    margin: 0 0 0.75rem 0;
+  }
+
+  .pane-header h3 {
+    font-size: 1rem;
+  }
+
+  .add-delete-table {
+    font-size: 0.75rem;
+    min-width: auto;
+    width: 100%;
+  }
+
+  .add-delete-table th,
+  .add-delete-table td {
+    padding: 0.25rem 0.1rem;
+  }
+
+  .add-delete-table .select-box {
+    max-width: 50px;
+    min-width: 40px;
+    font-size: 0.65rem;
+    padding: 0.1rem;
+  }
+
+  .button-group {
+    gap: 0.5rem;
+  }
+
+  .primary-button,
+  .secondary-button {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .paradigm-display-table {
+    min-width: 300px;
+    font-size: 0.8rem;
+  }
+
+  .paradigm-display-table th,
+  .paradigm-display-table td {
+    padding: 0.3rem;
+  }
+}
+
+/* Mobile Landscape Mode - Panes side by side */
+@media (max-width: 480px) and (orientation: landscape) {
+  .three-pane-layout {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.4rem;
+    padding: 0 0.2rem;
+  }
+
+  .pane {
+    padding: 0.4rem;
+    margin: 0 0 0.3rem 0;
+  }
+
+  .pane-header h3 {
+    font-size: 0.8rem;
+    line-height: 1.1;
+  }
+
+  .add-delete-table {
+    min-width: auto;
+    width: 100%;
+    font-size: 0.65rem;
+  }
+
+  .add-delete-table th,
+  .add-delete-table td {
+    padding: 0.15rem 0.08rem;
+    font-size: 0.6rem;
+  }
+
+  .add-delete-table .select-box {
+    max-width: 35px;
+    min-width: 25px;
+    font-size: 0.55rem;
+    padding: 0.05rem;
+  }
+
+  .paradigm-display-table {
+    min-width: 150px;
+    font-size: 0.65rem;
+  }
+
+  .paradigm-display-table th,
+  .paradigm-display-table td {
+    padding: 0.1rem;
+    font-size: 0.6rem;
+  }
+
+  .button-group {
+    gap: 0.25rem;
+  }
+
+  .primary-button,
+  .secondary-button {
+    padding: 0.25rem 0.4rem;
+    font-size: 0.7rem;
+  }
+}
+
+/* Mobile Portrait Mode - Panes stacked vertically */
+@media (max-width: 480px) and (orientation: portrait) {
+  .pane {
+    padding: 0.6rem;
+  }
+
+  .pane-header h3 {
+    font-size: 0.9rem;
+  }
+
+  .add-delete-table {
+    min-width: auto;
+    width: 100%;
+    font-size: 0.7rem;
+  }
+
+  .add-delete-table th,
+  .add-delete-table td {
+    padding: 0.2rem 0.1rem;
+    font-size: 0.65rem;
+  }
+
+  .add-delete-table .select-box {
+    max-width: 45px;
+    min-width: 35px;
+    font-size: 0.6rem;
+  }
+
+  .paradigm-display-table {
+    min-width: 250px;
+    font-size: 0.75rem;
+  }
+
+  .paradigm-display-table th,
+  .paradigm-display-table td {
+    padding: 0.2rem;
+  }
+}
+
+/* Paradigm Table Specific Styles - High Priority */
+.paradigm-table,
+.paradigm-table th,
+.paradigm-table td,
+.paradigm-table .word-cell,
+.paradigm-table .suffix-cell,
+.paradigm-table .none-cell {
+  text-align: center !important;
+}
+
+/* Force center alignment for all paradigm table content */
+table.paradigm-table th,
+table.paradigm-table td {
+  text-align: center !important;
+}
+
+/* Additional specificity for paradigm table */
+.table-container table.paradigm-table th,
+.table-container table.paradigm-table td {
+  text-align: center !important;
+}
+
+/* Ensure paradigm table cells maintain center alignment */
+.paradigm-table td[class*="cell"] {
+  text-align: center !important;
+}
+
+/* Override any conflicting styles */
+.paradigm-table * {
+  text-align: center !important;
+}
+
+/* Redundant operation warning styling */
+#redundantWarning {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeaa7;
+  border-radius: var(--radius-md);
+  padding: 0.75rem;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  display: none;
+}
+
+#redundantWarning i {
+  margin-right: 0.5rem;
+  color: #f39c12;
+}
+
+#redundantWarning strong {
+  color: #e67e22;
+}
+
+/* Animation for warning appearance */
+#redundantWarning.show {
+  animation: slideInWarning 0.3s ease-out;
+}
+
+@keyframes slideInWarning {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Target the actual paradigm table div and its contents */
+#paradigmTable table,
+#paradigmTable th,
+#paradigmTable td {
+  text-align: center !important;
+  border: 1px solid var(--color-neutral-300);
+  padding: 0.3rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.85rem;
+}
+
+/* Center column header text */
+.pane-left .paradigm-display-table th {
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* Make each word in the first row appear on a separate line */
+.pane-left .paradigm-display-table td {
+  text-align: center;
+  vertical-align: middle;
+  white-space: pre-line;
+}
+
+.pane-left .paradigm-display-table td span.break {
+  display: block;
+}
+
+/* Responsive design for paradigm table - similar to add-delete table */
+@media (max-width: 1200px) {
+  #paradigmTable table {
+    min-width: auto;
+    width: 100%;
+  }
+
+  #paradigmTable th,
+  #paradigmTable td {
+    padding: 0.25rem 0.2rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 900px) {
+  #paradigmTable table {
+    min-width: auto;
+    width: 100%;
+    font-size: 0.8rem;
+  }
+
+  #paradigmTable th,
+  #paradigmTable td {
+    padding: 0.2rem 0.15rem;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 600px) {
+  #paradigmTable table {
+    min-width: auto;
+    width: 100%;
+    font-size: 0.75rem;
+  }
+
+  #paradigmTable th,
+  #paradigmTable td {
+    padding: 0.15rem 0.1rem;
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  #paradigmTable table {
+    min-width: auto;
+    width: 100%;
+    font-size: 0.7rem;
+  }
+
+  #paradigmTable th,
+  #paradigmTable td {
+    padding: 0.1rem 0.08rem;
+    font-size: 0.65rem;
+  }
+}
+
+@media (max-width: 380px) {
+  #paradigmTable table {
+    min-width: auto;
+    width: 100%;
+    font-size: 0.65rem;
+  }
+
+  #paradigmTable th,
+  #paradigmTable td {
+    padding: 0.08rem 0.05rem;
+    font-size: 0.6rem;
+  }
+}
+
+/* Responsive design for correct answer table - similar to paradigm table */
+@media (max-width: 1200px) {
+  .correct-answer-table {
+    min-width: auto;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .correct-answer-table th,
+  .correct-answer-table td {
+    padding: 0.3rem 0.25rem;
+    font-size: 0.85rem;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .correct-answer-table {
+    min-width: auto;
+    width: 100%;
+    max-width: 100%;
+    font-size: 0.8rem;
+  }
+
+  .correct-answer-table th,
+  .correct-answer-table td {
+    padding: 0.25rem 0.2rem;
+    font-size: 0.75rem;
+    min-width: 0;
+  }
+
+  .correct-answer-table th:nth-child(1),
+  .correct-answer-table td:nth-child(1),
+  .correct-answer-table th:nth-child(2),
+  .correct-answer-table td:nth-child(2),
+  .correct-answer-table th:nth-child(3),
+  .correct-answer-table td:nth-child(3),
+  .correct-answer-table th:nth-child(4),
+  .correct-answer-table td:nth-child(4) {
+    min-width: 50px;
+  }
+}
+
+@media (max-width: 600px) {
+  .correct-answer-table {
+    min-width: auto;
+    width: 100%;
+    max-width: 100%;
+    font-size: 0.75rem;
+  }
+
+  .correct-answer-table th,
+  .correct-answer-table td {
+    padding: 0.2rem 0.15rem;
+    font-size: 0.7rem;
+    min-width: 0;
+  }
+
+  .correct-answer-table th:nth-child(1),
+  .correct-answer-table td:nth-child(1),
+  .correct-answer-table th:nth-child(2),
+  .correct-answer-table td:nth-child(2),
+  .correct-answer-table th:nth-child(3),
+  .correct-answer-table td:nth-child(3),
+  .correct-answer-table th:nth-child(4),
+  .correct-answer-table td:nth-child(4) {
+    min-width: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .correct-answer-table {
+    min-width: auto;
+    width: 100%;
+    max-width: 100%;
+    font-size: 0.7rem;
+  }
+
+  .correct-answer-table th,
+  .correct-answer-table td {
+    padding: 0.15rem 0.1rem;
+    font-size: 0.65rem;
+    min-width: 0;
+  }
+
+  .correct-answer-table th:nth-child(1),
+  .correct-answer-table td:nth-child(1),
+  .correct-answer-table th:nth-child(2),
+  .correct-answer-table td:nth-child(2),
+  .correct-answer-table th:nth-child(3),
+  .correct-answer-table td:nth-child(3),
+  .correct-answer-table th:nth-child(4),
+  .correct-answer-table td:nth-child(4) {
+    min-width: 35px;
+  }
+}
+
+@media (max-width: 380px) {
+  .correct-answer-table {
+    min-width: auto;
+    width: 100%;
+    max-width: 100%;
+    font-size: 0.65rem;
+  }
+
+  .correct-answer-table th,
+  .correct-answer-table td {
+    padding: 0.1rem 0.08rem;
+    font-size: 0.6rem;
+    min-width: 0;
+  }
+
+  .correct-answer-table th:nth-child(1),
+  .correct-answer-table td:nth-child(1),
+  .correct-answer-table th:nth-child(2),
+  .correct-answer-table td:nth-child(2),
+  .correct-answer-table th:nth-child(3),
+  .correct-answer-table td:nth-child(3),
+  .correct-answer-table th:nth-child(4),
+  .correct-answer-table td:nth-child(4) {
+    min-width: 30px;
+  }
+}
+
+/* Paradigm Table Styles */
+.paradigm-section {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: white;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-neutral-200);
+  box-shadow: var(--shadow-md);
+}
+
+.paradigm-display-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  background: white;
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.paradigm-display-table th,
+.paradigm-display-table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--color-neutral-200);
+}
+
+.paradigm-display-table th {
+  background-color: var(--color-primary);
+  color: white;
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+}
+
+.paradigm-display-table td {
+  background-color: white;
+  color: var(--color-neutral-800);
+}
+
+.paradigm-display-table tbody tr:hover {
+  background-color: var(--color-neutral-50);
+}
+
+.paradigm-display-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.instructions-panel,
+.three-pane-layout {
+  width: 100% !important;
+  max-width: 1400px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box;
+}

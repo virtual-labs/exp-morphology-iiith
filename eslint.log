@@ -1,0 +1,43 @@
+
+/home/runner/work/exp-morphology-iiith/exp-morphology-iiith/experiment/simulation/js/main.js
+   15:1   warning  'ga' is not defined                              no-undef
+   16:1   warning  'ga' is not defined                              no-undef
+  440:3   warning  'morphologyAnalyzer' is not defined              no-undef
+  467:21  warning  'morphologyAnalyzer' is not defined              no-undef
+  497:3   warning  'morphologyAnalyzer' is not defined              no-undef
+  498:3   warning  'morphologyAnalyzer' is not defined              no-undef
+  499:5   warning  'morphologyAnalyzer' is not defined              no-undef
+  500:3   warning  'morphologyAnalyzer' is not defined              no-undef
+  501:5   warning  'morphologyAnalyzer' is not defined              no-undef
+  506:8   warning  'morphologyAnalyzer' is not defined              no-undef
+  565:15  warning  'morphologyAnalyzer' is not defined              no-undef
+  577:15  warning  'morphologyAnalyzer' is not defined              no-undef
+  649:54  warning  'index' is defined but never used                no-unused-vars
+  663:10  warning  'updateDropdownColor' is defined but never used  no-unused-vars
+  664:8   warning  'morphologyAnalyzer' is not defined              no-undef
+  667:24  warning  'morphologyAnalyzer' is not defined              no-undef
+  699:8   warning  'morphologyAnalyzer' is not defined              no-undef
+  733:3   warning  'morphologyAnalyzer' is not defined              no-undef
+  734:19  warning  'morphologyAnalyzer' is not defined              no-undef
+  746:7   warning  'morphologyAnalyzer' is not defined              no-undef
+  747:7   warning  'morphologyAnalyzer' is not defined              no-undef
+  794:28  warning  'morphologyAnalyzer' is not defined              no-undef
+  795:25  warning  'morphologyAnalyzer' is not defined              no-undef
+  826:28  warning  'morphologyAnalyzer' is not defined              no-undef
+  827:25  warning  'morphologyAnalyzer' is not defined              no-undef
+  875:8   warning  'morphologyAnalyzer' is not defined              no-undef
+  886:45  warning  'morphologyAnalyzer' is not defined              no-undef
+  912:23  warning  'morphologyAnalyzer' is not defined              no-undef
+  915:23  warning  'morphologyAnalyzer' is not defined              no-undef
+  936:3   warning  'morphologyAnalyzer' is not defined              no-undef
+  937:3   warning  'morphologyAnalyzer' is not defined              no-undef
+  938:3   warning  'morphologyAnalyzer' is not defined              no-undef
+  939:3   warning  'morphologyAnalyzer' is not defined              no-undef
+
+/home/runner/work/exp-morphology-iiith/exp-morphology-iiith/experiment/simulation/js/mobile-detection.js
+  283:7   warning  'mobileDetection' is assigned a value but never used  no-unused-vars
+  286:38  warning  'module' is not defined                               no-undef
+  287:3   warning  'module' is not defined                               no-undef
+
+✖ 36 problems (0 errors, 36 warnings)
+
