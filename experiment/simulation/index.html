@@ -40,10 +40,13 @@
                 selecting the correct transformations:
                 <ul style="margin-left: 1.5em; margin-top: 0.3em">
                   <li>
-                    <strong>Delete:</strong> What to remove from the root word
+                    <strong>Delete:</strong> What to remove from the root
+                    word.<br />
+                    <em>If no deletion is needed, select <b>None</b>.</em>
                   </li>
                   <li>
-                    <strong>Add:</strong> What to add to create the new form
+                    <strong>Add:</strong> What to add to create the new form.<br />
+                    <em>If no addition is needed, select <b>None</b>.</em>
                   </li>
                   <li><strong>Number:</strong> Singular or Plural</li>
                   <li><strong>Case:</strong> Direct or Oblique</li>
@@ -51,8 +54,14 @@
               </li>
               <li>
                 <strong>Step 4:</strong> Click <strong>Submit</strong> to check
-                your answers or <strong>Get Answer</strong> to see the correct
-                transformations.
+                your answers.<br />
+                The <strong>Get Answer</strong> button is always available to
+                show the correct transformations and a supportive explanation.
+              </li>
+              <li>
+                <strong>Step 5:</strong> After submitting correct answers or
+                clicking <strong>Get Answer</strong>, a detailed explanation
+                will appear to help you learn the morphological rules.
               </li>
             </ul>
           </div>
@@ -178,6 +187,11 @@
 
             <!-- Correct Answer Display -->
             <div id="correctAnswer" class="answer-container"></div>
+            <div
+              id="supportiveExplanation"
+              class="supportive-explanation"
+              style="display: none"
+            ></div>
           </div>
         </div>
       </div>
