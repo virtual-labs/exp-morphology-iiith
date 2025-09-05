@@ -134,13 +134,13 @@ Words that follow similar morphological patterns belong to the same paradigm cla
 - खिड़की (khidkii - "window")
 - कुर्सी (kursii - "chair")
 
-##### **Class 3: Feminine Nouns ending in -त/क**
+##### **Class 3: Feminine Nouns ending in consonants or other vowels**
 
-- पुस्तक (pustak - "book")
-- किताब (kitaab - "book")
-- मेज (mej - "table")
-- चादर (chaadar - "sheet")
-- दुकान (dukaan - "shop")
+- पुस्तक (pustak - "book") [ends with 'क']
+- किताब (kitaab - "book") [ends with 'ब']
+- मेज (mej - "table") [ends with 'ज']
+- चादर (chaadar - "sheet") [ends with 'र']
+- दुकान (dukaan - "shop") [ends with 'न']
 
 ##### **Class 4: Masculine Nouns ending in consonants**
 
