@@ -1,0 +1,3 @@
+**To understand and practice morphological analysis of Hindi words through interactive exploration of linguistic paradigms and the Add-Delete table methodology.**
+
+This experiment aims to help students develop proficiency in identifying and analyzing the morphological components of Hindi words, including roots, affixes, and grammatical features such as gender, number, person, case, and tense. Through hands-on interaction with Hindi word paradigms and the Add-Delete table methodology, students will learn to decompose complex word forms into their constituent parts and understand how morphological features are encoded through systematic transformations.
