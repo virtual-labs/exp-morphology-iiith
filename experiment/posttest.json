@@ -45,11 +45,11 @@
       },
       "explanations": {
         "a": "Incorrect. This is the complete word, not the root.",
-        "b": "Incorrect. This includes additional morphemes beyond the root.",
-        "c": "Correct! The root is 'आदम' (aadam). The word 'आदमियों' is formed by adding 'ी' (feminine marker), 'य' (plural marker), and 'ों' (oblique case marker) to the root.",
+        "b": "Correct! The root (lexical base) is 'आदमी'. The form 'आदमियों' is the plural oblique form, where the noun takes the plural-oblique ending 'यों'.",
+        "c": "Incorrect. 'आदम' is not the accepted lexical root form used for this noun in Hindi morphology.",
         "d": "Incorrect. This is only a partial root."
       },
-      "correctAnswer": "c",
+      "correctAnswer": "b",
       "difficulty": "beginner"
     },
     {
@@ -155,4 +155,4 @@
       "difficulty": "advanced"
     }
   ]
-} 
+}
